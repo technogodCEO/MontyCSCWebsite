@@ -111,52 +111,42 @@ git commit -m "chore: scaffold Astro+Vue+Tailwind project with CI"
 
 ## Chunk 2: Design Tokens & Layout
 
+> **Note:** This chunk was written assuming Tailwind v3's JS config file. Chunk 1's implementation installed Tailwind v4 (Astro 7.2.4's `astro add tailwind` default), which uses CSS-first configuration via an `@theme` block instead of `tailwind.config.mjs`. Steps 1-2 below have been updated accordingly — there is no `tailwind.config.mjs` to create or modify.
+
 **Files:**
-- Modify: `tailwind.config.mjs`
-- Create: `src/styles/global.css`
+- Modify: `src/styles/global.css` (already exists from Chunk 1 scaffold, currently just `@import "tailwindcss";`)
 - Create: `src/layouts/Layout.astro`
 - Create: `src/components/ui/NavBar.astro`
 - Create: `src/components/ui/Footer.astro`
 - Test: `src/layouts/Layout.test.ts` (smoke test via Astro container API — see Step 6)
 
-- [ ] **Step 1: Define design tokens in Tailwind config**
+- [ ] **Step 1: Define design tokens and global styles (Tailwind v4 CSS-first)**
 
-In `tailwind.config.mjs`, extend the theme:
-```js
-export default {
-  content: ['./src/**/*.{astro,html,vue,ts}'],
-  theme: {
-    extend: {
-      colors: {
-        'deep-green': '#0b3d24',
-        'accent-green': '#3ea86b',
-        'gold': '#c9a227',
-        'near-black': '#0d1117',
-        'warm-white': '#f5f4ee',
-      },
-      fontFamily: {
-        heading: ['"Space Grotesk"', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-      },
-    },
-  },
-};
-```
-
-- [ ] **Step 2: Add font loading and global styles**
-
-Create `src/styles/global.css`:
+Modify `src/styles/global.css` to define theme tokens via an `@theme` block, which Tailwind v4 uses to auto-generate utility classes (e.g. `--color-deep-green` → `bg-deep-green`/`text-deep-green`, `--font-heading` → `font-heading`):
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-deep-green: #0b3d24;
+  --color-accent-green: #3ea86b;
+  --color-gold: #c9a227;
+  --color-near-black: #0d1117;
+  --color-warm-white: #f5f4ee;
+
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: Inter, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
 
 body {
   @apply font-body text-near-black bg-warm-white;
 }
 ```
+
+- [ ] **Step 2: Verify token utilities are generated**
+
+Run `npm run dev`, temporarily add `class="bg-deep-green text-gold font-heading"` to an element in `src/pages/index.astro`, confirm in the browser the styles apply (deep green background, gold text, Space Grotesk font), then remove the temporary class (real usage comes in Chunk 5's pages).
 
 - [ ] **Step 3: Build NavBar and Footer**
 
