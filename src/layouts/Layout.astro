@@ -27,11 +27,13 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
   </head>
-  <body>
+  <body class="flex min-h-dvh flex-col">
     <NavBar>
       <HeroGraph client:load transition:persist="hero-graph-ambient" ambient={true} slot="ambient-graph" />
     </NavBar>
-    <slot />
+    <main class="flex-1">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>
