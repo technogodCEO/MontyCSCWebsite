@@ -53,7 +53,7 @@ const ambientPositions: Record<string, string> = {
   workshops: 'top-0 left-0',
   hackathons: 'top-0 left-6',
   talks: 'top-0 left-12',
-  showcase: 'top-0 left-[4.5rem]',
+  showcase: 'top-0 left-16',
 };
 
 function positionClass(id: string) {
@@ -65,7 +65,7 @@ function positionClass(id: string) {
   <div
     class="relative font-mono"
     :class="[
-      ambient ? 'h-8 w-28' : 'h-[420px] w-full',
+      ambient ? 'h-8 w-20' : 'h-[420px] w-full',
       { 'animate-entrance': !skipEntranceAnimation },
     ]"
   >
@@ -74,11 +74,11 @@ function positionClass(id: string) {
       :key="node.id"
       :href="node.href"
       :data-node-id="node.id"
-      class="absolute flex items-center justify-center rounded-full border transition-opacity duration-200"
+      class="focus-visible:ring-gold absolute flex items-center justify-center rounded-full border outline-none transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-near-black"
       :class="[
         positionClass(node.id),
         ambient
-          ? 'bg-near-black border-accent-green/50 text-accent-green h-2 w-2 text-[0px]'
+          ? 'bg-near-black border-accent-green/50 text-accent-green h-2 w-2'
           : 'bg-near-black border-accent-green text-warm-white hover:border-gold px-4 py-2 text-sm',
         activeNodeId && activeNodeId !== node.id ? 'opacity-30' : 'opacity-100',
       ]"
@@ -94,6 +94,7 @@ function positionClass(id: string) {
     <TerminalPanel
       :lines="activeNode?.terminalLines ?? []"
       :open="!!activeNode"
+      :label="activeNode ? `${activeNode.label} details` : undefined"
       :class="ambient ? 'md:top-10 md:right-0' : 'md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2'"
       @close="closePanel"
     />
