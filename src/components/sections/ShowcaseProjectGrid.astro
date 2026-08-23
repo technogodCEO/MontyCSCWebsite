@@ -1,0 +1,53 @@
+---
+// src/components/sections/ShowcaseProjectGrid.astro
+// Showcase page project-card grid, one card per `showcase` collection entry.
+// Falls back to a brand-styled placeholder card when an entry has no image,
+// matching the Officers avatar-fallback pattern from the design spec.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projects: CollectionEntry<'showcase'>[];
+}
+const { projects } = Astro.props;
+---
+
+<div class="flex flex-col gap-6">
+  <h2 class="font-heading text-2xl font-semibold">Projects</h2>
+  <ul class="grid gap-6 md:grid-cols-2">
+    {
+      projects.map((project) => (
+        <li class="border-accent-green/40 flex flex-col gap-3 overflow-hidden rounded-lg border">
+          {project.data.image ? (
+            <img
+              src={project.data.image}
+              alt={project.data.title}
+              class="h-48 w-full object-cover"
+            />
+          ) : (
+            <div class="bg-deep-green text-accent-green flex h-48 w-full items-center justify-center font-mono text-sm">
+              {project.data.title}
+            </div>
+          )}
+          <div class="flex flex-col gap-2 p-4">
+            <h3 class="font-heading text-lg font-semibold">{project.data.title}</h3>
+            <p class="text-gold font-body text-sm">{project.data.event}</p>
+            {project.data.team && project.data.team.length > 0 && (
+              <p class="font-body text-warm-white/70 text-sm">{project.data.team.join(', ')}</p>
+            )}
+            {project.data.description && (
+              <p class="font-body text-warm-white/80 text-sm">{project.data.description}</p>
+            )}
+            {project.data.devpostUrl && (
+              <a
+                href={project.data.devpostUrl}
+                class="text-gold hover:text-warm-white w-fit font-body text-sm underline underline-offset-2 transition-colors"
+              >
+                View on Devpost
+              </a>
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</div>

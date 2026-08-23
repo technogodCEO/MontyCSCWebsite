@@ -1,0 +1,22 @@
+---
+// src/components/sections/Hero.astro
+// Homepage centerpiece: full (non-ambient) presentation of HeroGraph, with
+// headline/subhead copy. The ambient version is already mounted persistently
+// in Layout.astro's NavBar slot — this renders the full spread-out version
+// inline in the page flow.
+import HeroGraph from '../graph/HeroGraph.vue';
+---
+
+<section class="bg-near-black text-warm-white px-6 py-16 md:py-24">
+  <div class="mx-auto flex max-w-5xl flex-col items-center gap-10 text-center">
+    <div class="flex flex-col gap-4">
+      <h1 class="font-heading text-4xl font-bold md:text-6xl">Explore Computer Science</h1>
+      <p class="font-body text-accent-green mx-auto max-w-2xl text-lg md:text-xl">
+        Discover one of the most exciting STEM fields with trained instructors and your peers.
+        Weekly workshops, hackathons, and a beginner-friendly community — no experience required.
+      </p>
+    </div>
+
+    <HeroGraph client:load transition:persist="hero-graph" ambient={false} />
+  </div>
+</section>

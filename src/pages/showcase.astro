@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ShowcaseTrailer from '../components/sections/ShowcaseTrailer.astro';
+import ShowcaseGallery from '../components/sections/ShowcaseGallery.astro';
+import ShowcaseProjectGrid from '../components/sections/ShowcaseProjectGrid.astro';
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const projects = await getCollection('showcase');
+
+// The trailer and general gallery are static assets (public/showcase/), not
+// content-collection entries — see docs/superpowers/specs/…design.md §Content
+// Model. We check for the trailer file's existence at build time so a missing
+// asset renders a clear "coming soon" placeholder instead of the browser's
+// native broken-video state, which would look like a bug rather than
+// intentionally-unfinished placeholder content.
+const trailerPath = path.resolve('public/showcase/trailer.mp4');
+const hasTrailer = fs.existsSync(trailerPath);
+
+// PLACEHOLDER: no gallery images exist yet — add real paths (e.g.
+// '/showcase/gallery/photo-1.jpg') here once they're dropped into
+// public/showcase/. Left empty rather than hardcoding paths that 404.
+const galleryImages: string[] = [];
+---
+
+<Layout title="Showcase" description="Hackathon projects from Montgomery Computer Science Club.">
+  <section class="bg-near-black text-warm-white px-6 py-16">
+    <div class="mx-auto flex max-w-4xl flex-col gap-12">
+      <div class="flex flex-col gap-2">
+        <h1 class="font-heading text-4xl font-bold">Showcase</h1>
+        <p class="font-body text-warm-white/80 max-w-2xl">
+          Projects our members have built at MontyHacks and beyond.
+        </p>
+      </div>
+
+      <ShowcaseTrailer hasTrailer={hasTrailer} />
+      <ShowcaseGallery images={galleryImages} />
+      <ShowcaseProjectGrid projects={projects} />
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,25 @@
+---
+// src/components/sections/ShowcaseTrailer.astro
+// Showcase page trailer block. Receives the build-time existence check as a
+// prop (fs access stays in the page per the "pages fetch data" convention)
+// so a missing asset renders a clear placeholder instead of a broken <video>.
+interface Props {
+  hasTrailer: boolean;
+}
+const { hasTrailer } = Astro.props;
+---
+
+<div class="flex flex-col gap-4">
+  <h2 class="font-heading text-2xl font-semibold">Trailer</h2>
+  {
+    hasTrailer ? (
+      <video controls class="w-full rounded-lg" src="/showcase/trailer.mp4">
+        Your browser does not support the video tag.
+      </video>
+    ) : (
+      <div class="border-accent-green/40 text-warm-white/60 flex aspect-video w-full items-center justify-center rounded-lg border font-mono text-sm">
+        Trailer coming soon
+      </div>
+    )
+  }
+</div>

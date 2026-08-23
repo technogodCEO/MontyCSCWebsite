@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EventList from '../components/sections/EventList.astro';
+import { getCollection } from 'astro:content';
+
+// `date` is a plain 'YYYY-MM-DD' string, which sorts correctly with a plain
+// string comparison — avoids the timezone pitfall of routing through Date
+// (ISO date strings parse as UTC midnight, so comparing/formatting them
+// through the local Date object can shift the displayed day depending on
+// the build machine's timezone).
+const events = (await getCollection('events')).sort((a, b) =>
+  a.data.date.localeCompare(b.data.date),
+);
+---
+
+<Layout title="Events" description="Hackathons, competitions, and guest talks from Montgomery Computer Science Club.">
+  <section class="bg-near-black text-warm-white px-6 py-16">
+    <div class="mx-auto flex max-w-4xl flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <h1 class="font-heading text-4xl font-bold">Events</h1>
+        <p class="font-body text-warm-white/80 max-w-2xl">
+          Hackathons, competitions, and guest talks throughout the year.
+        </p>
+      </div>
+
+      <EventList events={events} />
+    </div>
+  </section>
+</Layout>

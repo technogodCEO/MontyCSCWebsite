@@ -1,0 +1,52 @@
+---
+// src/components/sections/FaqList.astro
+// FAQ list for the FAQ page. Owns its own static placeholder data locally,
+// mirroring how WhyJoin.astro owns its own static copy — not sourced from a
+// content collection per the Chunk 5 task notes.
+//
+// PLACEHOLDER: placeholder copy — verify/replace with officer-approved
+// answers before launch.
+const faqs = [
+  {
+    question: 'Do I need coding experience to join?',
+    answer:
+      'No. Most of our workshops are designed for beginners, and we regularly recap the basics before moving into new material. Bring curiosity, not a resume.',
+  },
+  {
+    question: 'How much time does the club require?',
+    answer:
+      'As much or as little as you want. Workshops meet weekly, but there is no minimum attendance — drop in when a topic interests you.',
+  },
+  {
+    question: 'What is MontyHacks?',
+    answer:
+      'MontyHacks is our flagship hackathon: a one-day event where teams build a project from scratch and demo it to judges for prizes. All skill levels welcome.',
+  },
+  {
+    question: 'How do I join?',
+    answer:
+      'Fill out the sign-up form linked from the homepage. We will add you to our mailing list with workshop times and upcoming events.',
+  },
+  {
+    question: 'Do I need to bring my own laptop?',
+    answer:
+      'Yes, if you have one — bring a laptop to workshops and hackathons so you can code along. If you do not have one, reach out to an officer and we will help you find a solution.',
+  },
+  {
+    question: 'Are events open to all grade levels?',
+    answer:
+      'Yes. Workshops and events are open to all members regardless of grade or experience level.',
+  },
+];
+---
+
+<dl class="flex flex-col gap-6">
+  {
+    faqs.map((faq) => (
+      <div class="border-deep-green/20 border-b pb-6">
+        <dt class="font-heading text-lg font-semibold">{faq.question}</dt>
+        <dd class="font-body text-near-black/80 mt-2 text-sm">{faq.answer}</dd>
+      </div>
+    ))
+  }
+</dl>

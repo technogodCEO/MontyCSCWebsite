@@ -1,0 +1,49 @@
+---
+// src/components/sections/WhatWeDo.astro
+// Homepage teaser for the Activities/Workshops page. Self-contained — receives
+// workshop entries as a prop and renders a short summary list, per the
+// "pages fetch data, sections render it" convention.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  workshops: CollectionEntry<'workshops'>[];
+}
+const { workshops } = Astro.props;
+
+const preview = workshops.slice(0, 3);
+---
+
+<section class="bg-deep-green text-warm-white px-6 py-16">
+  <div class="mx-auto flex max-w-5xl flex-col gap-8">
+    <div class="flex flex-col gap-2">
+      <h2 class="font-heading text-3xl font-bold">What We Do</h2>
+      <p class="font-body text-warm-white/80 max-w-2xl">
+        From beginner-friendly Python sessions to advanced competitive programming, our weekly
+        workshops meet you where you are.
+      </p>
+    </div>
+
+    <ul class="grid gap-6 md:grid-cols-3">
+      {
+        preview.map((workshop) => (
+          <li class="border-accent-green/40 flex flex-col gap-2 rounded-lg border p-5">
+            <span class="text-gold font-mono text-xs uppercase tracking-wide">
+              {workshop.data.level}
+            </span>
+            <h3 class="font-heading text-xl font-semibold">{workshop.data.title}</h3>
+            <p class="font-body text-warm-white/70 text-sm">
+              {workshop.data.day} &middot; {workshop.data.time}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      href="/activities"
+      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
+    >
+      See all activities
+    </a>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+---
+// src/components/sections/JoinCta.astro
+// Closing homepage call-to-action pointing at the sign-up form.
+// Note: the /signup route/form itself is out of scope for this chunk
+// (a later chunk builds the join form); this link is prepared in advance.
+---
+
+<section class="bg-near-black text-warm-white px-6 py-16">
+  <div class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+    <h2 class="font-heading text-3xl font-bold">Ready to Join?</h2>
+    <p class="font-body text-warm-white/80 max-w-xl">
+      Sign up in a couple minutes and we'll add you to our mailing list for workshops, hackathons,
+      and events.
+    </p>
+    <a
+      href="/signup"
+      class="bg-gold text-near-black hover:bg-warm-white w-fit rounded-full px-6 py-2 font-body text-sm font-semibold transition-colors"
+    >
+      Sign Up
+    </a>
+  </div>
+</section>
