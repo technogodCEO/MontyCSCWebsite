@@ -194,15 +194,6 @@ The function authenticates to the Google Sheets API via a Google service account
 
 This spec deliberately covers the whole site's design in one document, but it spans several largely independent subsystems — the static pages/content, the v1 hero/graph component, the contribution tooling, and the sign-up backend. It's expected to be **decomposed into separate implementation plans/phases** downstream (e.g. site shell + core pages, hero/graph component, content collections + contribution workflow, sign-up form + serverless function) rather than built as one undifferentiated plan.
 
-## Design Refinement Ideas (captured post-launch-review, not yet actioned)
-
-Raised after seeing the v1 foundation running locally. These are ideas to design/plan properly before building, not decisions yet — captured here so they aren't lost, same treatment as the v2 graph roadmap item above.
-
-- **Reconsider light sections almost entirely.** The original "leans dark, light sections used sparingly for reading-heavy content" call isn't working in practice — contrast reads poorly and the light sections feel like a mismatch against the rest of the site. Lean toward killing white/light backgrounds much more aggressively than originally planned; likely means reworking FAQ and any other light-section content to work on dark backgrounds instead, rather than tuning the existing light palette.
-- **Hero graph needs visible connecting lines between nodes, plus real animation.** Currently the nodes render without visible edges connecting them — the "graph" part of the network/graph motif isn't actually reading as a graph. Add SVG (or similar) lines between nodes, and some form of ambient animation (subtle motion/pulse on the lines or nodes) so it doesn't feel static. Needs to still respect `prefers-reduced-motion` and stay cheap enough to run ambiently, per the existing performance constraints.
-- **The CLI/terminal motif is underrepresented outside the graph's terminal panels.** Ideas to make it more pervasive across the site:
-  - Headings draw in with a typewriter effect by default, prefixed with a `>` prompt symbol (CLI-style), consistent everywhere a heading appears.
-  - For headings further down a page, the typewriter animation triggers on scroll into view rather than only on initial load.
-  - Buttons get a CLI-themed typewriter animation on hover, retyping to different text (like a terminal command changing) rather than a simple color/opacity hover state.
+Post-launch design refinement ideas (dark theme, graph edges/animation, CLI typewriter effects) raised after reviewing the v1 foundation live are tracked in `documentation/ROADMAP.md` rather than here, to keep this spec as the original design record and the roadmap as the up-to-date "what's next" doc.
 
 None of these are scoped or feasibility-checked yet (e.g. the pervasive typewriter-heading idea has real accessibility implications — screen readers and `prefers-reduced-motion` need real thought before this goes further, similar to how the v2 graph's mobile/a11y requirements were worked out before greenlighting it). Treat as a future design-refinement pass, not an immediate build target.

@@ -61,6 +61,47 @@ work has started on any of them:
 - **Real Google Sheets integration** — see "Known gaps" above; this is the natural
   next step once the club has the credentials.
 
+### Design refinement pass (captured post-launch-review, not yet actioned)
+
+Raised after seeing the v1 foundation running locally. Ideas to design/plan properly
+before building, not decisions yet — same treatment as the v2 graph item above.
+
+- **Reconsider light sections almost entirely.** The original "leans dark, light
+  sections used sparingly for reading-heavy content" call isn't working in practice —
+  contrast reads poorly and light sections feel like a mismatch against the rest of
+  the site. Lean toward killing white/light backgrounds much more aggressively than
+  originally planned; likely means reworking FAQ and any other light-section content
+  to work on dark backgrounds instead, rather than tuning the existing light palette.
+- **Hero graph needs visible connecting lines between nodes, plus real animation.**
+  Currently the nodes render without visible edges connecting them — the "graph" part
+  of the network/graph motif isn't actually reading as a graph. Add SVG (or similar)
+  lines between nodes, and some form of ambient animation (subtle motion/pulse on the
+  lines or nodes) so it doesn't feel static. Needs to still respect
+  `prefers-reduced-motion` and stay cheap enough to run ambiently, per the existing
+  performance constraints.
+- **The CLI/terminal motif is underrepresented outside the graph's terminal panels.**
+  Ideas to make it more pervasive across the site:
+  - Headings draw in with a typewriter effect by default, prefixed with a `>` prompt
+    symbol (CLI-style), consistent everywhere a heading appears.
+  - For headings further down a page, the typewriter animation triggers on scroll
+    into view rather than only on initial load.
+  - Buttons get a CLI-themed typewriter animation on hover, retyping to different
+    text (like a terminal command changing) rather than a simple color/opacity hover
+    state.
+
+  None of these are scoped or feasibility-checked yet (e.g. the pervasive
+  typewriter-heading idea has real accessibility implications — screen readers and
+  `prefers-reduced-motion` need real thought before this goes further, similar to how
+  the v2 graph's mobile/a11y requirements were worked out before greenlighting it).
+
+### Sign-up: temporary external Google Form
+
+Decided but not yet actioned: point sign-up traffic at an external Google Form for
+now (URL not finalized yet) rather than launching on the custom form + unconfigured
+Sheets backend. When the URL is ready: swap the NavBar/CTA links to it, keep
+`signup.astro` / `SignUpForm.vue` / `/api/signup` fully intact but unlinked from
+navigation (dormant, not deleted) so it's a one-line change to flip back later.
+
 ## Contributing to this file
 
 If you land a chunk (or take on roadmap work), update the relevant table row/section
