@@ -1,8 +1,8 @@
 # Architecture
 
 Technical reference for developers working on this codebase. For the "why" behind
-these decisions, see [`docs/superpowers/specs/2026-08-22-montycsc-website-design.md`](docs/superpowers/specs/2026-08-22-montycsc-website-design.md).
-For non-technical content edits, see [`CONTRIBUTING.md`](CONTRIBUTING.md) instead —
+these decisions, see [`docs/superpowers/specs/2026-08-22-montycsc-website-design.md`](../docs/superpowers/specs/2026-08-22-montycsc-website-design.md).
+For non-technical content edits, see [`CONTRIBUTING.md`](../CONTRIBUTING.md) instead —
 this doc assumes you're changing code, not just a workshop schedule.
 
 ## Stack
@@ -153,7 +153,7 @@ On every PR: checkout → Node 20 setup (npm cache) → `npm ci` → `npm run li
 
 ## Deliberately out of scope (for now)
 
-See the plan's ["What's Deliberately Not in This Plan"](docs/superpowers/plans/2026-08-22-site-foundation-plan.md#whats-deliberately-not-in-this-plan)
+See the plan's ["What's Deliberately Not in This Plan"](../docs/superpowers/plans/2026-08-22-site-foundation-plan.md#whats-deliberately-not-in-this-plan)
 section for the authoritative list. In short: no physics/draggable graph (v1 uses
 fixed positions), no real Google Sheets write for sign-ups (stubbed, logs instead),
 no real content/photos/social links (placeholders throughout, marked accordingly),
