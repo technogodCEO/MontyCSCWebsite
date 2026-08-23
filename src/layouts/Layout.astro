@@ -1,0 +1,35 @@
+---
+// src/layouts/Layout.astro
+import NavBar from '../components/ui/NavBar.astro';
+import Footer from '../components/ui/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = 'Montgomery Computer Science Club — explore computer science with peers and trained instructors.',
+} = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Montgomery CSC</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <!-- TODO: mount HeroGraph ambient instance into NavBar's ambient-graph slot, via transition:persist -->
+    <NavBar />
+    <slot />
+    <Footer />
+  </body>
+</html>
