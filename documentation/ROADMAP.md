@@ -16,29 +16,31 @@ for the underlying design decisions, see the [design spec](../docs/superpowers/s
 | 2. Design Tokens & Layout | `@theme` tokens, shared `Layout.astro`, NavBar, Footer | ✅ Done |
 | 3. Content Collections | Zod-validated `officers`/`workshops`/`events`/`showcase` collections + placeholder entries | ✅ Done |
 | 4. Hero v1 Graph Component | `HeroGraph.vue`/`TerminalPanel.vue`, fixed-position nodes, a11y fallback, reduced-motion support, persists across nav | ✅ Done |
-| 5. Pages | All sitemap pages (home, activities, events, showcase, officers, FAQ) with real copy + section components | 🔲 Not started |
-| 6. Sign-Up Form | `SignUpForm.vue` + `/api/signup` route (honeypot, rate limit; Sheets write stubbed) | 🔲 Not started |
+| 5. Pages | All sitemap pages (home, activities, events, showcase, officers, FAQ) with real copy + section components | ✅ Done |
+| 6. Sign-Up Form | `SignUpForm.vue` + `/api/signup` route (honeypot, rate limit; Sheets write stubbed) | ✅ Done |
 | 7. Contribution Docs | `CONTRIBUTING.md` for non-technical editors | ✅ Done |
 
-Also done, outside the original plan: `ARCHITECTURE.md` (technical reference) and this
-file, added at project-owner request.
+All 7 chunks of the site-foundation plan are complete.
+
+Also done, outside the original plan: `documentation/ARCHITECTURE.md` (technical
+reference), this file, and a root `README.md`, added at project-owner request.
 
 ## Known gaps / deliberate placeholders (launch-blocking, tracked)
 
 These are intentional per the design spec — not bugs — but need real values before
 public launch:
 
-- **Sign-up backend** — `/api/signup` (once built in Chunk 6) will log submissions
-  instead of writing to Google Sheets, until the club provisions a Google Cloud
-  service account and its credentials are set as Vercel env vars
-  (`GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_KEY`, `TARGET_SHEET_ID`).
+- **Sign-up backend** — `/api/signup` logs submissions instead of writing to Google
+  Sheets, until the club provisions a Google Cloud service account and its
+  credentials are set as Vercel env vars (`GOOGLE_SERVICE_ACCOUNT_EMAIL`,
+  `GOOGLE_SERVICE_ACCOUNT_KEY`, `TARGET_SHEET_ID`).
 - **Real content** — officer names/photos, exact workshop schedule, real event dates,
   and real social links (Instagram/Facebook/Linktree) are all placeholder values
   marked with `<!-- PLACEHOLDER -->` / `<!-- TODO -->` comments in the content files
   and `Footer.astro`.
 - **Showcase assets** — trailer video and gallery photos from the last MontyHacks
-  need to be dropped into `public/showcase/` (see that directory's README once
-  Chunk 5 creates it) — the page is built to degrade gracefully without them.
+  need to be dropped into `public/showcase/` (see `public/showcase/README.md`) — the
+  page is built to degrade gracefully without them.
 - **Production domain** — `astro.config.mjs`'s `site` field is a placeholder
   (`https://montycsc.example.com`), needed for correct sitemap/OG URLs.
 - **Vercel project connection** — one-time dashboard action (connect the GitHub repo
