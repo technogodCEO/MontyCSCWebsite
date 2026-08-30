@@ -4,6 +4,7 @@
 // Falls back to a brand-styled placeholder card when an entry has no image,
 // matching the Officers avatar-fallback pattern from the design spec.
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from '../ui/CliHeading.astro';
 
 interface Props {
   projects: CollectionEntry<'showcase'>[];
@@ -12,7 +13,7 @@ const { projects } = Astro.props;
 ---
 
 <div class="flex flex-col gap-6">
-  <h2 class="font-heading text-2xl font-semibold">Projects</h2>
+  <CliHeading as="h2" text="Projects" class="font-heading text-2xl font-semibold" />
   <ul class="grid gap-6 md:grid-cols-2">
     {
       projects.map((project) => (
