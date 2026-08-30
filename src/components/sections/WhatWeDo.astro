@@ -5,6 +5,7 @@
 // "pages fetch data, sections render it" convention.
 import type { CollectionEntry } from 'astro:content';
 import CliHeading from '../ui/CliHeading.astro';
+import CliButton from '../ui/CliButton.astro';
 
 interface Props {
   workshops: CollectionEntry<'workshops'>[];
@@ -40,11 +41,11 @@ const preview = workshops.slice(0, 3);
       }
     </ul>
 
-    <a
+    <CliButton
       href="/activities"
-      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
-    >
-      See all activities
-    </a>
+      label="See all activities"
+      base="view_activities()"
+      alt="cd ./activities"
+    />
   </div>
 </section>

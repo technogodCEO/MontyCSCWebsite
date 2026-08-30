@@ -5,6 +5,7 @@
 // Officers avatar-fallback pattern described in the design spec.
 import type { CollectionEntry } from 'astro:content';
 import CliHeading from '../ui/CliHeading.astro';
+import CliButton from '../ui/CliButton.astro';
 
 interface Props {
   entries: CollectionEntry<'showcase'>[];
@@ -43,11 +44,11 @@ const preview = entries.slice(0, 3);
       }
     </ul>
 
-    <a
+    <CliButton
       href="/showcase"
-      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
-    >
-      Visit the full showcase
-    </a>
+      label="Visit the full showcase"
+      base="open_showcase()"
+      alt="ls ./showcase"
+    />
   </div>
 </section>
