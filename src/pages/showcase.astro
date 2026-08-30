@@ -6,6 +6,7 @@ import ShowcaseProjectGrid from '../components/sections/ShowcaseProjectGrid.astr
 import { getCollection } from 'astro:content';
 import fs from 'node:fs';
 import path from 'node:path';
+import CliHeading from '../components/ui/CliHeading.astro';
 
 const projects = await getCollection('showcase');
 
@@ -28,7 +29,7 @@ const galleryImages: string[] = [];
   <section class="bg-near-black text-warm-white px-6 py-16">
     <div class="mx-auto flex max-w-4xl flex-col gap-12">
       <div class="flex flex-col gap-2">
-        <h1 class="font-heading text-4xl font-bold">Showcase</h1>
+        <CliHeading as="h1" text="Showcase" class="font-heading text-4xl font-bold" />
         <p class="font-body text-warm-white/80 max-w-2xl">
           Projects our members have built at MontyHacks and beyond.
         </p>

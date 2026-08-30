@@ -4,6 +4,8 @@
 // workshop entries as a prop and renders a short summary list, per the
 // "pages fetch data, sections render it" convention.
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from '../ui/CliHeading.astro';
+import CliButton from '../ui/CliButton.astro';
 
 interface Props {
   workshops: CollectionEntry<'workshops'>[];
@@ -16,7 +18,7 @@ const preview = workshops.slice(0, 3);
 <section class="bg-deep-green text-warm-white px-6 py-16">
   <div class="mx-auto flex max-w-5xl flex-col gap-8">
     <div class="flex flex-col gap-2">
-      <h2 class="font-heading text-3xl font-bold">What We Do</h2>
+      <CliHeading as="h2" text="What We Do" class="font-heading text-3xl font-bold" />
       <p class="font-body text-warm-white/80 max-w-2xl">
         From beginner-friendly Python sessions to advanced competitive programming, our weekly
         workshops meet you where you are.
@@ -30,7 +32,7 @@ const preview = workshops.slice(0, 3);
             <span class="text-gold font-mono text-xs uppercase tracking-wide">
               {workshop.data.level}
             </span>
-            <h3 class="font-heading text-xl font-semibold">{workshop.data.title}</h3>
+            <CliHeading as="h3" text={workshop.data.title} animate={false} class="font-heading text-xl font-semibold" />
             <p class="font-body text-warm-white/70 text-sm">
               {workshop.data.day} &middot; {workshop.data.time}
             </p>
@@ -39,11 +41,11 @@ const preview = workshops.slice(0, 3);
       }
     </ul>
 
-    <a
+    <CliButton
       href="/activities"
-      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
-    >
-      See all activities
-    </a>
+      label="See all activities"
+      base="view_activities()"
+      alt="cd ./activities"
+    />
   </div>
 </section>

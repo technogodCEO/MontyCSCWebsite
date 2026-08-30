@@ -4,6 +4,8 @@
 // brand-styled placeholder card when an entry has no image, matching the
 // Officers avatar-fallback pattern described in the design spec.
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from '../ui/CliHeading.astro';
+import CliButton from '../ui/CliButton.astro';
 
 interface Props {
   entries: CollectionEntry<'showcase'>[];
@@ -16,7 +18,7 @@ const preview = entries.slice(0, 3);
 <section class="bg-near-black text-warm-white px-6 py-16">
   <div class="mx-auto flex max-w-5xl flex-col gap-8">
     <div class="flex flex-col gap-2">
-      <h2 class="font-heading text-3xl font-bold">From the Showcase</h2>
+      <CliHeading as="h2" text="From the Showcase" class="font-heading text-3xl font-bold" />
       <p class="font-body text-warm-white/80 max-w-2xl">
         A few projects our members have built at MontyHacks and beyond.
       </p>
@@ -34,7 +36,7 @@ const preview = entries.slice(0, 3);
               </div>
             )}
             <div class="flex flex-col gap-1 p-4">
-              <h3 class="font-heading text-lg font-semibold">{entry.data.title}</h3>
+              <CliHeading as="h3" text={entry.data.title} animate={false} class="font-heading text-lg font-semibold" />
               <p class="font-body text-warm-white/70 text-sm">{entry.data.event}</p>
             </div>
           </li>
@@ -42,11 +44,11 @@ const preview = entries.slice(0, 3);
       }
     </ul>
 
-    <a
+    <CliButton
       href="/showcase"
-      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
-    >
-      Visit the full showcase
-    </a>
+      label="Visit the full showcase"
+      base="open_showcase()"
+      alt="ls ./showcase"
+    />
   </div>
 </section>

@@ -1,20 +1,17 @@
 ---
 // src/components/sections/FaqTeaser.astro
 // Short homepage teaser linking to the full FAQ page.
+import CliHeading from '../ui/CliHeading.astro';
+import CliButton from '../ui/CliButton.astro';
 ---
 
 <section class="bg-near-black text-warm-white px-6 py-16">
   <div class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
-    <h2 class="font-heading text-3xl font-bold">Got Questions?</h2>
+    <CliHeading as="h2" text="Got Questions?" class="font-heading text-3xl font-bold" />
     <p class="font-body text-warm-white/80 max-w-xl">
       New to the club, or new to coding entirely? Our FAQ covers the basics — experience level,
       time commitment, and how to get started.
     </p>
-    <a
-      href="/faq"
-      class="border-gold text-gold hover:bg-gold hover:text-near-black w-fit rounded-full border px-5 py-2 font-body text-sm transition-colors"
-    >
-      Read the FAQ
-    </a>
+    <CliButton href="/faq" label="Read the FAQ" base="read_faq()" alt="man montycsc" />
   </div>
 </section>

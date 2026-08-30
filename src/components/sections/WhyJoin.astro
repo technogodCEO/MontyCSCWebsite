@@ -1,6 +1,8 @@
 ---
 // src/components/sections/WhyJoin.astro
 // Static homepage section pitching membership. No collection data needed.
+import CliHeading from '../ui/CliHeading.astro';
+
 const reasons = [
   {
     title: 'No experience required',
@@ -19,13 +21,13 @@ const reasons = [
 
 <section class="bg-deep-green text-warm-white px-6 py-16">
   <div class="mx-auto flex max-w-5xl flex-col gap-8">
-    <h2 class="font-heading text-3xl font-bold">Why Join</h2>
+    <CliHeading as="h2" text="Why Join" class="font-heading text-3xl font-bold" />
 
     <ul class="grid gap-6 md:grid-cols-3">
       {
         reasons.map((reason) => (
           <li class="flex flex-col gap-2">
-            <h3 class="font-heading text-gold text-xl font-semibold">{reason.title}</h3>
+            <CliHeading as="h3" text={reason.title} animate={false} class="font-heading text-gold text-xl font-semibold" />
             <p class="font-body text-warm-white/80 text-sm">{reason.body}</p>
           </li>
         ))

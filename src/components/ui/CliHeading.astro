@@ -1,0 +1,29 @@
+---
+// src/components/ui/CliHeading.astro
+// Server-renders a real heading with the complete text as its accessible name.
+// The visible text sits in an aria-hidden span so the shared cli-motif script
+// can animate it character-by-character without screen readers ever seeing a
+// partial string. The `>` prompt prefix is CSS (.cli-heading::before) and is
+// always present, animation or not.
+type Level = 'h1' | 'h2' | 'h3';
+
+interface Props {
+  as?: Level;
+  text: string;
+  /** Typewriter-in. Defaults on for h1/h2, off for h3. h1 types on load; h2 on scroll-in. */
+  animate?: boolean;
+  class?: string;
+}
+
+const { as: Tag = 'h2', text, animate = Tag !== 'h3', class: className } = Astro.props as Props;
+const trigger: 'load' | 'scroll' = Tag === 'h1' ? 'load' : 'scroll';
+---
+
+<Tag
+  class:list={['cli-heading', className]}
+  aria-label={text}
+  data-cli-heading={animate ? '' : undefined}
+  data-cli-trigger={animate ? trigger : undefined}
+>
+  <span aria-hidden="true" data-cli-text>{text}</span>
+</Tag>

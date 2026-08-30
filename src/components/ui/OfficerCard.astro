@@ -6,6 +6,7 @@
 // deliberately minimal (name+role only), so this must look intentional with
 // nothing filled in beyond that.
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from './CliHeading.astro';
 
 interface Props {
   officer: CollectionEntry<'officers'>;
@@ -37,7 +38,7 @@ const initials = name
   }
 
   <div class="flex flex-col gap-1">
-    <h3 class="font-heading text-lg font-semibold">{name}</h3>
+    <CliHeading as="h3" text={name} animate={false} class="font-heading text-lg font-semibold" />
     <p class="text-gold font-body text-sm">{role}</p>
   </div>
 

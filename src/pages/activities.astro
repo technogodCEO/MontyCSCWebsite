@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import WorkshopList from '../components/sections/WorkshopList.astro';
 import { getCollection } from 'astro:content';
+import CliHeading from '../components/ui/CliHeading.astro';
 
 const workshops = await getCollection('workshops');
 ---
@@ -10,7 +11,7 @@ const workshops = await getCollection('workshops');
   <section class="bg-near-black text-warm-white px-6 py-16">
     <div class="mx-auto flex max-w-4xl flex-col gap-8">
       <div class="flex flex-col gap-2">
-        <h1 class="font-heading text-4xl font-bold">Activities</h1>
+        <CliHeading as="h1" text="Activities" class="font-heading text-4xl font-bold" />
         <p class="font-body text-warm-white/80 max-w-2xl">
           Our weekly workshop schedule. Drop in to any session — no sign-up required, and no
           experience needed unless noted.
