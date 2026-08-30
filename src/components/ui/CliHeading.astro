@@ -15,7 +15,7 @@ interface Props {
   class?: string;
 }
 
-const { as: Tag = 'h2', text, animate = Tag !== 'h3', class: className } = Astro.props;
+const { as: Tag = 'h2', text, animate = Tag !== 'h3', class: className } = Astro.props as Props;
 const trigger: 'load' | 'scroll' = Tag === 'h1' ? 'load' : 'scroll';
 ---
 
