@@ -1,0 +1,31 @@
+---
+// src/components/sections/WorkshopList.astro
+// Full workshop schedule list for the Activities page.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  workshops: CollectionEntry<'workshops'>[];
+}
+const { workshops } = Astro.props;
+---
+
+<ul class="flex flex-col gap-4">
+  {
+    workshops.map((workshop) => (
+      <li class="border-accent-green/40 flex flex-col gap-2 rounded-lg border p-5">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 class="font-heading text-xl font-semibold">{workshop.data.title}</h2>
+          <span class="text-gold font-mono text-xs uppercase tracking-wide">
+            {workshop.data.level}
+          </span>
+        </div>
+        <p class="font-body text-warm-white/70 text-sm">
+          {workshop.data.day} &middot; {workshop.data.time}
+        </p>
+        {workshop.data.description && (
+          <p class="font-body text-warm-white/80 text-sm">{workshop.data.description}</p>
+        )}
+      </li>
+    ))
+  }
+</ul>

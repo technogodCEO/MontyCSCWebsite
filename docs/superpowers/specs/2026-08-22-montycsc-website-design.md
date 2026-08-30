@@ -193,3 +193,7 @@ The function authenticates to the Google Sheets API via a Google service account
 ## Phasing Note
 
 This spec deliberately covers the whole site's design in one document, but it spans several largely independent subsystems — the static pages/content, the v1 hero/graph component, the contribution tooling, and the sign-up backend. It's expected to be **decomposed into separate implementation plans/phases** downstream (e.g. site shell + core pages, hero/graph component, content collections + contribution workflow, sign-up form + serverless function) rather than built as one undifferentiated plan.
+
+Post-launch design refinement ideas (dark theme, graph edges/animation, CLI typewriter effects) raised after reviewing the v1 foundation live are tracked in `documentation/ROADMAP.md` rather than here, to keep this spec as the original design record and the roadmap as the up-to-date "what's next" doc.
+
+None of these are scoped or feasibility-checked yet (e.g. the pervasive typewriter-heading idea has real accessibility implications — screen readers and `prefers-reduced-motion` need real thought before this goes further, similar to how the v2 graph's mobile/a11y requirements were worked out before greenlighting it). Treat as a future design-refinement pass, not an immediate build target.

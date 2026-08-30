@@ -1,0 +1,15 @@
+---
+// src/components/sections/OfficersGrid.astro
+// Officers page grid — composes OfficerCard per entry.
+import type { CollectionEntry } from 'astro:content';
+import OfficerCard from '../ui/OfficerCard.astro';
+
+interface Props {
+  officers: CollectionEntry<'officers'>[];
+}
+const { officers } = Astro.props;
+---
+
+<ul class="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+  {officers.map((officer) => <OfficerCard officer={officer} />)}
+</ul>

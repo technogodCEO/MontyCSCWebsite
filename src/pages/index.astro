@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/sections/Hero.astro';
+import WhatWeDo from '../components/sections/WhatWeDo.astro';
+import ShowcaseHighlights from '../components/sections/ShowcaseHighlights.astro';
+import WhyJoin from '../components/sections/WhyJoin.astro';
+import FaqTeaser from '../components/sections/FaqTeaser.astro';
+import JoinCta from '../components/sections/JoinCta.astro';
+import { getCollection } from 'astro:content';
+
+const workshops = await getCollection('workshops');
+const showcaseEntries = await getCollection('showcase');
+---
+
+<Layout title="Home">
+  <Hero />
+  <WhatWeDo workshops={workshops} />
+  <ShowcaseHighlights entries={showcaseEntries} />
+  <WhyJoin />
+  <FaqTeaser />
+  <JoinCta />
+</Layout>

@@ -1,0 +1,22 @@
+---
+// src/components/sections/ShowcaseGallery.astro
+// Showcase page general gallery block (static image paths, not a collection
+// — see docs/superpowers/specs/…design.md §Content Model).
+interface Props {
+  images: string[];
+}
+const { images } = Astro.props;
+---
+
+{
+  images.length > 0 && (
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading text-2xl font-semibold">Gallery</h2>
+      <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {images.map((src) => (
+          <img src={src} alt="MontyHacks gallery photo" class="rounded-lg object-cover" />
+        ))}
+      </div>
+    </div>
+  )
+}

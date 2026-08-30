@@ -1,0 +1,62 @@
+---
+// src/components/ui/OfficerCard.astro
+// Renders one officer entry with graceful degradation per the design spec:
+// generic avatar if `photo` is absent, no bio block if `bio` is absent, no
+// social row if `links` is absent. Officer entries from Chunk 3 are
+// deliberately minimal (name+role only), so this must look intentional with
+// nothing filled in beyond that.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  officer: CollectionEntry<'officers'>;
+}
+const { officer } = Astro.props;
+const { name, role, photo, bio, links } = officer.data;
+
+const initials = name
+  .split(' ')
+  .map((part) => part[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+
+<li class="border-accent-green/40 flex flex-col items-center gap-3 rounded-lg border p-6 text-center">
+  {
+    photo ? (
+      <img src={photo} alt={name} class="border-gold h-24 w-24 rounded-full border-2 object-cover" />
+    ) : (
+      <div
+        class="bg-deep-green text-gold border-gold flex h-24 w-24 items-center justify-center rounded-full border-2 font-heading text-2xl font-bold"
+        aria-hidden="true"
+      >
+        {initials}
+      </div>
+    )
+  }
+
+  <div class="flex flex-col gap-1">
+    <h3 class="font-heading text-lg font-semibold">{name}</h3>
+    <p class="text-gold font-body text-sm">{role}</p>
+  </div>
+
+  {bio && <p class="font-body text-warm-white/80 max-w-xs text-sm">{bio}</p>}
+
+  {
+    links && (links.linkedin || links.github) && (
+      <div class="flex gap-4 font-body text-sm">
+        {links.linkedin && (
+          <a href={links.linkedin} class="hover:text-gold transition-colors">
+            LinkedIn
+          </a>
+        )}
+        {links.github && (
+          <a href={links.github} class="hover:text-gold transition-colors">
+            GitHub
+          </a>
+        )}
+      </div>
+    )
+  }
+</li>

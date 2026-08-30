@@ -1,0 +1,35 @@
+---
+// src/components/sections/WhyJoin.astro
+// Static homepage section pitching membership. No collection data needed.
+const reasons = [
+  {
+    title: 'No experience required',
+    body: 'Every workshop starts from the basics and builds up — whether it is your first line of code or your fifth language.',
+  },
+  {
+    title: 'Trained instructors',
+    body: 'Sessions are led by peers and mentors who know how to teach, not just how to code.',
+  },
+  {
+    title: 'A real community',
+    body: 'Hackathons, guest talks, and competitions give you people to build with, not just a syllabus.',
+  },
+];
+---
+
+<section class="bg-deep-green text-warm-white px-6 py-16">
+  <div class="mx-auto flex max-w-5xl flex-col gap-8">
+    <h2 class="font-heading text-3xl font-bold">Why Join</h2>
+
+    <ul class="grid gap-6 md:grid-cols-3">
+      {
+        reasons.map((reason) => (
+          <li class="flex flex-col gap-2">
+            <h3 class="font-heading text-gold text-xl font-semibold">{reason.title}</h3>
+            <p class="font-body text-warm-white/80 text-sm">{reason.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
