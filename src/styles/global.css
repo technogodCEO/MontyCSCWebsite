@@ -58,3 +58,33 @@ body {
   justify-content: center;
   white-space: nowrap;
 }
+
+/* Primary CTA — `>` prompt slides in + blinks on hover/focus. CSS only. */
+.cta-button__prompt {
+  position: absolute;
+  left: 0.75rem;
+  font-family: var(--font-mono);
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.cta-button__label {
+  transition: transform 0.16s ease;
+}
+.cta-button:hover .cta-button__prompt,
+.cta-button:focus-visible .cta-button__prompt {
+  opacity: 1;
+  transform: translateX(0);
+  animation: cli-blink 1s steps(1) infinite;
+}
+.cta-button:hover .cta-button__label,
+.cta-button:focus-visible .cta-button__label {
+  transform: translateX(0.9rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-button__prompt,
+  .cta-button__label { transition: none; }
+  .cta-button:hover .cta-button__prompt,
+  .cta-button:focus-visible .cta-button__prompt { animation: none; }
+}
