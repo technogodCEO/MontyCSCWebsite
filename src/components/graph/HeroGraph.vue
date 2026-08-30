@@ -72,7 +72,50 @@ let rafId: number | null = null;
 let startTime = 0;
 const rootRef = ref<HTMLElement | null>(null);
 
-function advancePacket(_t: number) {}
+const PACKET_TRAVEL_MS = 1400;
+const PACKET_GAP_MIN_MS = 3000;
+const PACKET_GAP_MAX_MS = 7000;
+
+const packet = ref<{ from: string; to: string; progress: number } | null>(null);
+let packetNextAt = PACKET_GAP_MIN_MS; // first packet a few seconds in
+let packetRunStart = 0;
+
+function scheduleNextPacket(t: number) {
+  packetNextAt = t + PACKET_GAP_MIN_MS + Math.random() * (PACKET_GAP_MAX_MS - PACKET_GAP_MIN_MS);
+  packet.value = null;
+}
+
+function advancePacket(t: number) {
+  if (packet.value) {
+    const elapsed = t - packetRunStart;
+    const p = elapsed / PACKET_TRAVEL_MS;
+    if (p >= 1) {
+      scheduleNextPacket(t);
+    } else {
+      packet.value = { ...packet.value, progress: p };
+    }
+    return;
+  }
+  if (t >= packetNextAt) {
+    const edge = graphEdges[Math.floor(Math.random() * graphEdges.length)];
+    const reversed = Math.random() < 0.5;
+    packet.value = {
+      from: reversed ? edge.to : edge.from,
+      to: reversed ? edge.from : edge.to,
+      progress: 0,
+    };
+    packetRunStart = t;
+  }
+}
+
+/** Current packet position (percentage), lerped between the two live node centres. */
+const packetPos = computed(() => {
+  if (!packet.value) return null;
+  const a = pos(packet.value.from);
+  const b = pos(packet.value.to);
+  const p = packet.value.progress;
+  return { x: a.x + (b.x - a.x) * p, y: a.y + (b.y - a.y) * p };
+});
 
 function tick(now: number) {
   if (!startTime) startTime = now;
@@ -159,6 +202,19 @@ onBeforeUnmount(() => {
         :class="edge.kind === 'diagonal' ? 'opacity-25' : 'opacity-50'"
       />
     </svg>
+
+    <div
+      v-if="animated"
+      data-testid="graph-packet-layer"
+      class="pointer-events-none absolute inset-0"
+      aria-hidden="true"
+    >
+      <span
+        v-if="packetPos"
+        class="bg-gold absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        :style="{ left: packetPos.x + '%', top: packetPos.y + '%' }"
+      />
+    </div>
 
     <a
       v-for="node in graphNodes"

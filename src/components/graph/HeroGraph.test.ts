@@ -53,4 +53,22 @@ describe('HeroGraph', () => {
     const wrapper = mount(HeroGraph, { props: { ambient: true } });
     expect(wrapper.findAll('[data-testid="graph-edges"] line')).toHaveLength(4);
   });
+
+  test('full hero (motion allowed) can mount a packet element', async () => {
+    mockReducedMotion(false);
+    const wrapper = mount(HeroGraph);
+    // packet is absent until its first scheduled run; assert the layer exists
+    expect(wrapper.find('[data-testid="graph-packet-layer"]').exists()).toBe(true);
+  });
+
+  test('reduced-motion: no packet layer at all', () => {
+    mockReducedMotion(true);
+    const wrapper = mount(HeroGraph);
+    expect(wrapper.find('[data-testid="graph-packet-layer"]').exists()).toBe(false);
+  });
+
+  test('ambient cluster: no packet layer', () => {
+    const wrapper = mount(HeroGraph, { props: { ambient: true } });
+    expect(wrapper.find('[data-testid="graph-packet-layer"]').exists()).toBe(false);
+  });
 });
