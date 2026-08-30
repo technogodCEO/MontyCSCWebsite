@@ -58,13 +58,13 @@ async function handleSubmit() {
   <div class="mx-auto flex w-full max-w-md flex-col gap-6">
     <div
       v-if="state === 'success'"
-      class="flex flex-col gap-2 rounded-lg bg-deep-green/10 p-6 text-center"
+      class="flex flex-col gap-2 rounded-lg bg-deep-green/40 border border-accent-green/25 p-6 text-center"
       aria-live="polite"
     >
-      <h2 class="font-heading text-2xl font-bold text-deep-green">
+      <h2 class="font-heading text-2xl font-bold text-warm-white">
         You're signed up!
       </h2>
-      <p class="font-body text-near-black/70">
+      <p class="font-body text-warm-white/75">
         Thanks for joining — keep an eye on your inbox for next steps.
       </p>
     </div>
@@ -77,7 +77,7 @@ async function handleSubmit() {
       <div
         v-if="errorMessage"
         ref="errorBanner"
-        class="rounded-md bg-red-100 px-4 py-3 font-body text-sm text-red-800 focus:outline-none"
+        class="rounded-md bg-red-950/60 border border-red-500/40 px-4 py-3 font-body text-sm text-red-200 focus:outline-none"
         role="alert"
         tabindex="-1"
       >
@@ -87,7 +87,7 @@ async function handleSubmit() {
       <div class="flex flex-col gap-1">
         <label
           for="signup-name"
-          class="font-body text-sm font-medium text-near-black"
+          class="font-body text-sm font-medium text-warm-white"
         >Name</label>
         <input
           id="signup-name"
@@ -96,14 +96,14 @@ async function handleSubmit() {
           name="name"
           required
           autocomplete="name"
-          class="rounded-md border border-near-black/20 bg-warm-white px-3 py-2 font-body text-near-black focus:border-accent-green focus:outline-none"
+          class="rounded-md border border-accent-green/30 bg-near-black px-3 py-2 font-body text-warm-white placeholder:text-warm-white/40 focus:border-accent-green focus:outline-none"
         >
       </div>
 
       <div class="flex flex-col gap-1">
         <label
           for="signup-email"
-          class="font-body text-sm font-medium text-near-black"
+          class="font-body text-sm font-medium text-warm-white"
         >Email</label>
         <input
           id="signup-email"
@@ -112,14 +112,14 @@ async function handleSubmit() {
           name="email"
           required
           autocomplete="email"
-          class="rounded-md border border-near-black/20 bg-warm-white px-3 py-2 font-body text-near-black focus:border-accent-green focus:outline-none"
+          class="rounded-md border border-accent-green/30 bg-near-black px-3 py-2 font-body text-warm-white placeholder:text-warm-white/40 focus:border-accent-green focus:outline-none"
         >
       </div>
 
       <div class="flex flex-col gap-1">
         <label
           for="signup-grade"
-          class="font-body text-sm font-medium text-near-black"
+          class="font-body text-sm font-medium text-warm-white"
         >Grade level</label>
         <input
           id="signup-grade"
@@ -128,7 +128,7 @@ async function handleSubmit() {
           name="grade"
           placeholder="e.g. 10th grade"
           required
-          class="rounded-md border border-near-black/20 bg-warm-white px-3 py-2 font-body text-near-black focus:border-accent-green focus:outline-none"
+          class="rounded-md border border-accent-green/30 bg-near-black px-3 py-2 font-body text-warm-white placeholder:text-warm-white/40 focus:border-accent-green focus:outline-none"
         >
       </div>
 

@@ -40,12 +40,12 @@ const faqs = [
 ];
 ---
 
-<dl class="flex flex-col gap-6">
+<dl class="flex flex-col gap-4">
   {
     faqs.map((faq) => (
-      <div class="border-deep-green/20 border-b pb-6">
-        <dt class="font-heading text-lg font-semibold">{faq.question}</dt>
-        <dd class="font-body text-near-black/80 mt-2 text-sm">{faq.answer}</dd>
+      <div class="border-accent-green/25 bg-deep-green/40 rounded-lg border p-5">
+        <dt class="font-heading text-warm-white text-lg font-semibold">{faq.question}</dt>
+        <dd class="font-body text-warm-white/75 mt-2 text-sm">{faq.answer}</dd>
       </div>
     ))
   }
