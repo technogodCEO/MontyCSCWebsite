@@ -16,3 +16,36 @@
 body {
   @apply font-body text-warm-white bg-near-black;
 }
+
+/* CLI/terminal motif — see docs/superpowers/specs/2026-08-30-design-refinement-pass-design.md §3 */
+
+.cli-heading {
+  position: relative;
+}
+
+/* Static prompt on every heading rendered through CliHeading. Always present —
+   independent of whether the typewriter animation runs. */
+.cli-heading::before {
+  content: "> ";
+  font-family: var(--font-mono);
+  color: var(--color-accent-green);
+  font-weight: 400;
+}
+
+.cli-cursor {
+  display: inline-block;
+  width: 0.55ch;
+  margin-left: 0.05ch;
+  background: var(--color-accent-green);
+  color: transparent;
+  animation: cli-blink 1s steps(1) infinite;
+}
+.cli-cursor::after { content: "\00a0"; }
+
+@keyframes cli-blink {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cli-cursor { display: none; }
+}
