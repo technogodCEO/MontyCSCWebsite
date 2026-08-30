@@ -14,5 +14,5 @@
 }
 
 body {
-  @apply font-body text-near-black bg-warm-white;
+  @apply font-body text-warm-white bg-near-black;
 }

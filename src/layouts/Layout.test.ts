@@ -13,3 +13,16 @@ test('renders title in head', async () => {
   expect(result).toContain('Home · Montgomery CSC');
   expect(result).toContain('content');
 });
+
+test('body uses the dark default surface', async () => {
+  const container = await AstroContainer.create();
+  container.addServerRenderer({ renderer: vueRenderer });
+  const result = await container.renderToString(Layout, {
+    props: { title: 'Home' },
+    slots: { default: 'content' },
+  });
+  // body carries the layout flex classes; assert the dark surface is present
+  // and the old light one is gone.
+  expect(result).toMatch(/<body[^>]*class="[^"]*bg-near-black[^"]*"/);
+  expect(result).not.toMatch(/<body[^>]*class="[^"]*bg-warm-white[^"]*"/);
+});
