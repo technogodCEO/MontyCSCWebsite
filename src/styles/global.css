@@ -49,3 +49,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .cli-cursor { display: none; }
 }
+
+/* Retyping changes label length (read_faq() -> man montycsc), which would jog
+   layout. Reserve enough width for the longest label (alt "cd ./activities"
+   is 15ch -> 16ch). */
+.cli-button {
+  min-width: 16ch;
+  justify-content: center;
+  white-space: nowrap;
+}

@@ -1,0 +1,29 @@
+---
+// src/components/ui/CliButton.astro
+// Secondary "terminal" button. Renders an fn()-style label; the shared cli-motif
+// script retypes it to `alt` on hover/focus. The accessible name is the plain
+// human `label` and never changes.
+interface Props {
+  label: string; // accessible name, e.g. "Read the FAQ"
+  base: string; // resting visible label, e.g. "read_faq()"
+  alt: string; // hover/focus label, e.g. "man montycsc"
+  href: string;
+  class?: string;
+}
+const { label, base, alt, href, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  aria-label={label}
+  data-cli-button
+  data-base={base}
+  data-alt={alt}
+  class:list={[
+    'cli-button border-accent-green text-accent-green hover:border-gold hover:text-gold',
+    'inline-flex w-fit items-center rounded-md border px-4 py-2 font-mono text-sm transition-colors',
+    className,
+  ]}
+>
+  <span aria-hidden="true" data-cli-button-text>{base}</span>
+</a>
