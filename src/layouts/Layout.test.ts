@@ -26,3 +26,15 @@ test('body uses the dark default surface', async () => {
   expect(result).toMatch(/<body[^>]*class="[^"]*bg-near-black[^"]*"/);
   expect(result).not.toMatch(/<body[^>]*class="[^"]*bg-warm-white[^"]*"/);
 });
+
+test('enables View Transitions via ClientRouter', async () => {
+  const container = await AstroContainer.create();
+  container.addServerRenderer({ renderer: vueRenderer });
+  const result = await container.renderToString(Layout, {
+    props: { title: 'Home' },
+    slots: { default: 'content' },
+  });
+  // ClientRouter injects this meta into <head>; the hero graph's
+  // transition:persist keys are inert without it.
+  expect(result).toContain('astro-view-transitions-enabled');
+});

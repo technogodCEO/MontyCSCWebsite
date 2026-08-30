@@ -1,5 +1,6 @@
 ---
 // src/layouts/Layout.astro
+import { ClientRouter } from 'astro:transitions';
 import NavBar from '../components/ui/NavBar.astro';
 import Footer from '../components/ui/Footer.astro';
 import HeroGraph from '../components/graph/HeroGraph.vue';
@@ -26,6 +27,7 @@ const {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <ClientRouter />
   </head>
   <body class="bg-near-black text-warm-white flex min-h-dvh flex-col">
     <NavBar>
@@ -37,13 +39,13 @@ const {
     <Footer />
     <script>
       import { enhance } from '../scripts/cli-motif';
-      // astro:page-load fires on initial load AND after every View Transition.
+      // ClientRouter emits astro:page-load on initial load AND after every soft
+      // navigation, so persisted-DOM pages re-enhance their new headings.
       document.addEventListener('astro:page-load', enhance);
-      // Fallback for the no-View-Transitions case: run once on first load too.
-      // enhance() is idempotent (:not([data-cli-done]) guards), so double-firing is safe.
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', enhance);
-      } else {
+      // Guard the race where this deferred module runs after astro:page-load has
+      // already fired on a fast first paint. enhance() is idempotent
+      // (:not([data-cli-done]) guards), so an extra call is a no-op.
+      if (document.readyState !== 'loading') {
         enhance();
       }
     </script>
