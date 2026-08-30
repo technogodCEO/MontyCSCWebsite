@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { graphNodes, graphEdges } from './graphNodes';
 import TerminalPanel from './TerminalPanel.vue';
 
@@ -23,11 +23,13 @@ const activeNodeId = ref<string | null>(null);
 // Checked synchronously (not in onMounted) so the class is correct on the very
 // first render — SSR has no window, so this only ever applies client-side,
 // which matches when the entrance animation would run anyway.
-const skipEntranceAnimation = ref(
+const prefersReducedMotion = ref(
   typeof window !== 'undefined' && window.matchMedia
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false,
 );
+// keep skipEntranceAnimation as an alias so the template class check is unchanged
+const skipEntranceAnimation = prefersReducedMotion;
 
 const activeNode = computed(() => graphNodes.find((node) => node.id === activeNodeId.value) ?? null);
 
@@ -62,10 +64,75 @@ const livePositions = ref<Record<string, { x: number; y: number }>>(
 function pos(id: string) {
   return livePositions.value[id];
 }
+
+/** Motion runs only in the full hero, only when motion is allowed. */
+const animated = !props.ambient && !prefersReducedMotion.value;
+
+let rafId: number | null = null;
+let startTime = 0;
+const rootRef = ref<HTMLElement | null>(null);
+
+function advancePacket(_t: number) {}
+
+function tick(now: number) {
+  if (!startTime) startTime = now;
+  const t = now - startTime;
+  for (const node of graphNodes) {
+    const { ax, ay, fx, fy, px, py } = node.drift;
+    livePositions.value[node.id] = {
+      x: node.base.x + Math.sin(t * fx + px) * ax,
+      y: node.base.y + Math.cos(t * fy + py) * ay,
+    };
+  }
+  advancePacket(t);
+  rafId = requestAnimationFrame(tick);
+}
+
+function startLoop() {
+  if (!animated || rafId !== null || typeof requestAnimationFrame !== 'function') return;
+  if (typeof document !== 'undefined' && document.hidden) return;
+  rafId = requestAnimationFrame(tick);
+}
+
+function stopLoop() {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+function onVisibilityChange() {
+  if (document.hidden) stopLoop();
+  else startLoop();
+}
+
+onMounted(() => {
+  if (!animated) return;
+  document.addEventListener('visibilitychange', onVisibilityChange);
+
+  if (typeof IntersectionObserver !== 'undefined' && rootRef.value) {
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? startLoop() : stopLoop()),
+      { threshold: 0 },
+    );
+    io.observe(rootRef.value);
+    onBeforeUnmount(() => io.disconnect());
+  } else {
+    startLoop();
+  }
+});
+
+onBeforeUnmount(() => {
+  stopLoop();
+  if (typeof document !== 'undefined') {
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+  }
+});
 </script>
 
 <template>
   <div
+    ref="rootRef"
     class="relative font-mono"
     :class="[
       ambient ? 'h-8 w-20' : 'h-[420px] w-full',

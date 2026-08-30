@@ -1,7 +1,18 @@
 // @vitest-environment happy-dom
-import { describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import HeroGraph from './HeroGraph.vue';
+
+function mockReducedMotion(reduce: boolean) {
+  window.matchMedia = ((query: string) => ({
+    matches: reduce && query.includes('reduce'),
+    media: query,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  })) as unknown as typeof window.matchMedia;
+}
+
+beforeEach(() => mockReducedMotion(false));
 
 describe('HeroGraph', () => {
   test('clicking a node opens its terminal panel with matching content', async () => {
@@ -18,14 +29,18 @@ describe('HeroGraph', () => {
   });
 
   test('respects prefers-reduced-motion by skipping entrance animation class', () => {
-    window.matchMedia = ((query: string) => ({
-      matches: query.includes('reduce'),
-      media: query,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-    })) as unknown as typeof window.matchMedia;
+    mockReducedMotion(true);
     const wrapper = mount(HeroGraph);
     expect(wrapper.classes()).not.toContain('animate-entrance');
+  });
+
+  test('reduced-motion: nodes sit exactly at their resting coordinates', () => {
+    mockReducedMotion(true);
+    const wrapper = mount(HeroGraph);
+    const a = wrapper.get('[data-node-id="workshops"]');
+    // base.x/base.y for workshops is 24 / 44
+    expect(a.attributes('style')).toContain('left: 24%');
+    expect(a.attributes('style')).toContain('top: 44%');
   });
 
   test('full hero renders the near-mesh: 6 edge lines', () => {
