@@ -35,5 +35,17 @@ const {
       <slot />
     </main>
     <Footer />
+    <script>
+      import { enhance } from '../scripts/cli-motif';
+      // astro:page-load fires on initial load AND after every View Transition.
+      document.addEventListener('astro:page-load', enhance);
+      // Fallback for the no-View-Transitions case: run once on first load too.
+      // enhance() is idempotent (:not([data-cli-done]) guards), so double-firing is safe.
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhance);
+      } else {
+        enhance();
+      }
+    </script>
   </body>
 </html>
