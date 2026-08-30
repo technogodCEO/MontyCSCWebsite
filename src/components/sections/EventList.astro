@@ -3,6 +3,7 @@
 // Full events list for the Events page (assumes entries are pre-sorted by
 // the page's getCollection() fetch).
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from '../ui/CliHeading.astro';
 
 interface Props {
   events: CollectionEntry<'events'>[];
@@ -15,7 +16,7 @@ const { events } = Astro.props;
     events.map((event) => (
       <li class="border-accent-green/40 flex flex-col gap-2 rounded-lg border p-5">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 class="font-heading text-xl font-semibold">{event.data.title}</h2>
+          <CliHeading as="h2" text={event.data.title} animate={false} class="font-heading text-xl font-semibold" />
           <span class="text-gold font-mono text-xs uppercase tracking-wide">
             {event.data.type}
           </span>

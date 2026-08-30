@@ -31,7 +31,7 @@ const preview = workshops.slice(0, 3);
             <span class="text-gold font-mono text-xs uppercase tracking-wide">
               {workshop.data.level}
             </span>
-            <h3 class="font-heading text-xl font-semibold">{workshop.data.title}</h3>
+            <CliHeading as="h3" text={workshop.data.title} animate={false} class="font-heading text-xl font-semibold" />
             <p class="font-body text-warm-white/70 text-sm">
               {workshop.data.day} &middot; {workshop.data.time}
             </p>

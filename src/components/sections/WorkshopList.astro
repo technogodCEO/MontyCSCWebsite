@@ -2,6 +2,7 @@
 // src/components/sections/WorkshopList.astro
 // Full workshop schedule list for the Activities page.
 import type { CollectionEntry } from 'astro:content';
+import CliHeading from '../ui/CliHeading.astro';
 
 interface Props {
   workshops: CollectionEntry<'workshops'>[];
@@ -14,7 +15,7 @@ const { workshops } = Astro.props;
     workshops.map((workshop) => (
       <li class="border-accent-green/40 flex flex-col gap-2 rounded-lg border p-5">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 class="font-heading text-xl font-semibold">{workshop.data.title}</h2>
+          <CliHeading as="h2" text={workshop.data.title} animate={false} class="font-heading text-xl font-semibold" />
           <span class="text-gold font-mono text-xs uppercase tracking-wide">
             {workshop.data.level}
           </span>
