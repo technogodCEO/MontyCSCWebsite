@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { graphNodes } from './graphNodes';
+import { graphNodes, graphEdges } from './graphNodes';
 import TerminalPanel from './TerminalPanel.vue';
 
 const props = withDefaults(
@@ -40,24 +40,27 @@ function closePanel() {
   activeNodeId.value = null;
 }
 
-// Fixed v1 layout positions (no physics simulation) — differ between the full
-// hero spread and the compact ambient cluster.
-const fullPositions: Record<string, string> = {
-  workshops: 'top-[8%] left-[12%]',
-  hackathons: 'top-[15%] right-[10%]',
-  talks: 'bottom-[20%] left-[18%]',
-  showcase: 'bottom-[10%] right-[16%]',
-};
+/** Resting coordinate lookup — full layout vs compact cluster. */
+function restingPos(id: string) {
+  const node = graphNodes.find((n) => n.id === id)!;
+  return props.ambient ? node.ambientBase : node.base;
+}
 
-const ambientPositions: Record<string, string> = {
-  workshops: 'top-0 left-0',
-  hackathons: 'top-0 left-6',
-  talks: 'top-0 left-12',
-  showcase: 'top-0 left-16',
-};
+/** Edges to draw: full hero gets the near-mesh, the ambient cluster gets the ring only. */
+const visibleEdges = computed(() =>
+  props.ambient ? graphEdges.filter((e) => e.kind === 'ring') : graphEdges,
+);
 
-function positionClass(id: string) {
-  return props.ambient ? ambientPositions[id] : fullPositions[id];
+/**
+ * Live positions, keyed by node id, as {x, y} percentages. Seeded at rest;
+ * Task 3's rAF loop mutates these each frame. Edges and nodes both read here.
+ */
+const livePositions = ref<Record<string, { x: number; y: number }>>(
+  Object.fromEntries(graphNodes.map((n) => [n.id, { ...restingPos(n.id) }])),
+);
+
+function pos(id: string) {
+  return livePositions.value[id];
 }
 </script>
 
@@ -69,14 +72,35 @@ function positionClass(id: string) {
       { 'animate-entrance': !skipEntranceAnimation },
     ]"
   >
+    <svg
+      data-testid="graph-edges"
+      class="pointer-events-none absolute inset-0 h-full w-full"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <line
+        v-for="(edge, i) in visibleEdges"
+        :key="i"
+        :x1="pos(edge.from).x"
+        :y1="pos(edge.from).y"
+        :x2="pos(edge.to).x"
+        :y2="pos(edge.to).y"
+        vector-effect="non-scaling-stroke"
+        :stroke-width="edge.kind === 'diagonal' ? 1 : 1.25"
+        class="stroke-accent-green"
+        :class="edge.kind === 'diagonal' ? 'opacity-25' : 'opacity-50'"
+      />
+    </svg>
+
     <a
       v-for="node in graphNodes"
       :key="node.id"
       :href="node.href"
       :data-node-id="node.id"
-      class="focus-visible:ring-gold absolute flex items-center justify-center rounded-full border outline-none transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-near-black"
+      class="focus-visible:ring-gold absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border outline-none transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-near-black"
+      :style="{ left: pos(node.id).x + '%', top: pos(node.id).y + '%' }"
       :class="[
-        positionClass(node.id),
         ambient
           ? 'bg-near-black border-accent-green/50 text-accent-green h-2 w-2'
           : 'bg-near-black border-accent-green text-warm-white hover:border-gold px-4 py-2 text-sm',

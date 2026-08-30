@@ -27,4 +27,15 @@ describe('HeroGraph', () => {
     const wrapper = mount(HeroGraph);
     expect(wrapper.classes()).not.toContain('animate-entrance');
   });
+
+  test('full hero renders the near-mesh: 6 edge lines', () => {
+    const wrapper = mount(HeroGraph);
+    expect(wrapper.find('[data-testid="graph-edges"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-testid="graph-edges"] line')).toHaveLength(6);
+  });
+
+  test('ambient cluster renders ring edges only: 4 lines, no diagonals', () => {
+    const wrapper = mount(HeroGraph, { props: { ambient: true } });
+    expect(wrapper.findAll('[data-testid="graph-edges"] line')).toHaveLength(4);
+  });
 });
