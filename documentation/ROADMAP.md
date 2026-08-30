@@ -61,10 +61,20 @@ work has started on any of them:
 - **Real Google Sheets integration** — see "Known gaps" above; this is the natural
   next step once the club has the credentials.
 
-### Design refinement pass (captured post-launch-review, not yet actioned)
+### Design refinement pass (specced 2026-08-30, plans ready)
 
-Raised after seeing the v1 foundation running locally. Ideas to design/plan properly
-before building, not decisions yet — same treatment as the v2 graph item above.
+Raised after seeing the v1 foundation running locally. Now designed and planned:
+see [the design spec](../docs/superpowers/specs/2026-08-30-design-refinement-pass-design.md)
+and three implementation plans in `docs/superpowers/plans/` (`2026-08-30-refinement-{a,b,c}-*.md`).
+Delivered as three independent PRs off `feat/design-refinement`:
+
+- **A — kill light sections** (foundational, lands first)
+- **B — pervasive CLI/terminal motif** (`>`-prefixed typewriter headings, secondary
+  button hover-retype, primary CTA `>`-slide; depends on A)
+- **C — hero graph edges + ambient animation** (near-mesh edges, per-node drift,
+  stochastic packet; independent)
+
+Original notes below, retained for context.
 
 - **Reconsider light sections almost entirely.** The original "leans dark, light
   sections used sparingly for reading-heavy content" call isn't working in practice —
