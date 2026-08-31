@@ -32,23 +32,43 @@ const links = [
 </nav>
 
 <style>
-  /* CLI prompt that fades in on hover/focus. The glyph slot is always present
-     (occupies width even at opacity 0) so hovering doesn't shift the label. */
+  /* CLI prompt that slides in from the left and blinks on hover/focus, echoing
+     the primary CTA's gesture. The slot is permanently reserved (padding-left)
+     so the label and sibling links never shift. */
+  .nav-link {
+    position: relative;
+    padding-left: 0.9rem;
+  }
+
   .nav-link::before {
-    content: '> ';
+    content: '>';
+    position: absolute;
+    left: 0;
     font-family: var(--font-mono);
     color: var(--color-accent-green);
     opacity: 0;
+    transform: translateX(-0.3rem);
   }
 
   .nav-link:hover::before,
   .nav-link:focus-visible::before {
     opacity: 1;
+    transform: translateX(0);
+    animation: cli-blink 1s steps(1) infinite;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .nav-link::before {
-      transition: opacity 0.12s ease;
+      transition:
+        opacity 0.14s ease,
+        transform 0.14s ease;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link:hover::before,
+    .nav-link:focus-visible::before {
+      animation: none;
     }
   }
 </style>
