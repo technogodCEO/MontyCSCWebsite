@@ -18,7 +18,7 @@ const links = [
     {
       links.map((link) => (
         <li>
-          <a href={link.href} class="hover:text-gold transition-colors">
+          <a href={link.href} class="nav-link hover:text-gold transition-colors">
             {link.label}
           </a>
         </li>
@@ -30,3 +30,54 @@ const links = [
     <slot name="ambient-graph" />
   </div>
 </nav>
+
+<style>
+  /* CLI prompt: no reserved space at rest — links sit at their natural spacing.
+     On hover/focus the link grows a left pad to fit the `>`, which slides in and
+     blinks; that widening shifts this link's label and every link after it.
+     Echoes the primary CTA's gesture. */
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono);
+    color: var(--color-gold);
+    opacity: 0;
+    transform: translateX(-0.3rem);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    padding-left: 0.9rem;
+  }
+
+  .nav-link:hover::before,
+  .nav-link:focus-visible::before {
+    opacity: 1;
+    transform: translateX(0);
+    animation: cli-blink 1s steps(1) infinite;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link {
+      transition: padding-left 0.14s ease;
+    }
+
+    .nav-link::before {
+      transition:
+        opacity 0.14s ease,
+        transform 0.14s ease;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link:hover::before,
+    .nav-link:focus-visible::before {
+      animation: none;
+    }
+  }
+</style>
