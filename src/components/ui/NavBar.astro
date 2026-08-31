@@ -18,7 +18,7 @@ const links = [
     {
       links.map((link) => (
         <li>
-          <a href={link.href} class="hover:text-gold transition-colors">
+          <a href={link.href} class="nav-link hover:text-gold transition-colors">
             {link.label}
           </a>
         </li>
@@ -30,3 +30,25 @@ const links = [
     <slot name="ambient-graph" />
   </div>
 </nav>
+
+<style>
+  /* CLI prompt that fades in on hover/focus. The glyph slot is always present
+     (occupies width even at opacity 0) so hovering doesn't shift the label. */
+  .nav-link::before {
+    content: '> ';
+    font-family: var(--font-mono);
+    color: var(--color-accent-green);
+    opacity: 0;
+  }
+
+  .nav-link:hover::before,
+  .nav-link:focus-visible::before {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link::before {
+      transition: opacity 0.12s ease;
+    }
+  }
+</style>
