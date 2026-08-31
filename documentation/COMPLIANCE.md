@@ -1,8 +1,14 @@
 # Compliance & Standards — Action Items
 
 Audit of the site against **accessibility (WCAG 2.2 AA)**, **SEO / metadata**,
-**performance / Core Web Vitals**, and **privacy / legal**. Done 2026-08-31 against
-`main` (commit `1832234`).
+**performance / Core Web Vitals**, **privacy / legal**, and **security**. Done
+2026-08-31 against `main` (commit `1832234`).
+
+**On security specifically:** the attack surface is small — a static-first Astro
+build with one unauthenticated on-demand route (`/api/signup`), no database, no
+user accounts, no secrets in client code, and no `set:html` / `v-html` /
+`innerHTML` on dynamic data. Nothing below is urgent. It's standard hardening,
+listed so it's tracked rather than rediscovered.
 
 Items are grouped by severity (Critical → Low). Each item lists the area, where it
 lives, and the fix. Check items off in the PR that resolves them and note the PR
@@ -39,6 +45,15 @@ number.
 | 21 | Gallery images share one generic `alt` string | A11y (WCAG 1.1.1) | 🟢 Low |
 | 22 | No `theme-color`, `apple-touch-icon`, or web manifest | SEO / PWA polish | 🟢 Low |
 | 23 | No `loading="lazy"` on below-the-fold images | Perf | 🟢 Low |
+| 24 | No security response headers / CSP | Security | 🟡 Medium |
+| 25 | `npm audit`: 3 high-severity (`path-to-regexp` via `@astrojs/vercel`) | Security | 🟡 Medium |
+| 26 | `/api/signup` input validation is thin (no length caps, no `Content-Type` check, extra keys passed through) | Security | 🟡 Medium |
+| 27 | Rate limit is per-instance in-memory only | Security | 🟢 Low |
+| 28 | No `Origin` / `Referer` check on `/api/signup` | Security | 🟢 Low |
+| 29 | CI actions pinned to major-version tags, not commit SHAs | Security | 🟢 Low |
+| 30 | Content-schema URL fields are `z.string()`, not `z.string().url()` | Security | 🟢 Low |
+| 31 | `.vue` external links not guaranteed `rel="noopener"` | Security | 🟢 Low |
+| 32 | Google service-account key must be a sensitive env var, never logged | Security | 🟢 Low |
 
 ---
 
@@ -121,11 +136,12 @@ Real issues, not launch-blocking.
   [`SignUpForm.vue`](../src/components/sections/SignUpForm.vue): "e.g. 10th grade"
   lives only in `placeholder` text at `warm-white/40` (~3.5:1). Put it in visible
   helper text below the label.
-- [ ] **16. Verify `TerminalPanel` dialog behavior.**
-  [`TerminalPanel.vue`](../src/components/graph/TerminalPanel.vue) has
-  `role="dialog"` — confirm it moves focus in on open, closes on `Esc`, traps
-  focus while open, and restores focus to the trigger on close. WCAG 2.1.2 /
-  2.4.3.
+- [ ] **16. Add a focus trap to `TerminalPanel`.**
+  [`TerminalPanel.vue`](../src/components/graph/TerminalPanel.vue) already sets
+  `aria-modal="true"`, moves focus to the close button on open, closes on `Esc`
+  and outside-click, and restores focus to the trigger on close — good. The one
+  gap: `Tab` from the close button escapes the dialog into the page behind it.
+  Contain `Tab`/`Shift+Tab` within the panel while open. WCAG 2.4.3.
 - [ ] **17. Lazy-hydrate the homepage hero graph.**
   [`Hero.astro`](../src/components/sections/Hero.astro) mounts `HeroGraph`
   `client:load` below the fold while the ambient copy in the nav also hydrates on
@@ -137,6 +153,24 @@ Real issues, not launch-blocking.
   [`Layout.astro`](../src/layouts/Layout.astro) (name, url, logo, sameAs socials).
 - [ ] **20. Mark the active nav link.** Add `aria-current="page"` in
   [`NavBar.astro`](../src/components/ui/NavBar.astro) based on the current path.
+- [ ] **24. Add security response headers.** No `vercel.json` and no headers set
+  anywhere. Add: `Content-Security-Policy` (start report-only), `X-Content-Type-Options:
+  nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
+  `Permissions-Policy` (deny camera/mic/geolocation), and `frame-ancestors 'none'`
+  (or `X-Frame-Options: DENY`). A `vercel.json` `headers` block is the simplest
+  home. Self-hosting fonts (#11) makes a strict CSP much easier — no
+  `fonts.googleapis.com` / `fonts.gstatic.com` allowances needed.
+- [ ] **25. Clear the `npm audit` high-severity advisories.** Three highs, all
+  one chain: `@astrojs/vercel` → `@vercel/routing-utils` → `path-to-regexp`
+  (backtracking-regex ReDoS, GHSA-9wv6-86v2-598j). It's route-matching code, low
+  practical impact here, but the fix is a real upgrade (`@astrojs/vercel` 8+,
+  which pulls Astro 5) — plan it as its own PR, don't `audit fix --force` blindly.
+- [ ] **26. Tighten `/api/signup` input validation.**
+  [`signup.ts`](../src/pages/api/signup.ts) checks field presence and an email
+  regex only. Add: a `Content-Type: application/json` check; length caps on
+  `name` / `email` / `grade` (e.g. ≤100 chars each) and a cap on total body size;
+  a `grade` allowlist (ties into #12); and pick only known fields before the
+  Sheets write instead of forwarding the whole parsed `body`.
 
 ## 🟢 Low
 
@@ -150,6 +184,37 @@ Polish.
   browser/OS integration polish in [`Layout.astro`](../src/layouts/Layout.astro).
 - [ ] **23. Add `loading="lazy"` to below-the-fold images.** Mostly handled by
   #10 if `astro:assets` is adopted; note here in case that slips.
+- [ ] **27. Replace the in-memory rate limit if spam becomes real.**
+  [`signup.ts`](../src/pages/api/signup.ts) keeps a per-process `Map`; on Vercel
+  each serverless instance has its own, so the effective limit is `3 ×
+  concurrent instances` and it resets on every cold start. The code comment
+  already acknowledges this. Fine for launch — swap to Vercel KV / Upstash or add
+  a CAPTCHA only if abuse actually shows up.
+- [ ] **28. Check `Origin` / `Referer` on `/api/signup`.** No CSRF token, and
+  once the Sheets write is live any site can script a cross-origin `fetch` POST
+  (CORS blocks reading the response, not sending the request) → spam vector.
+  Reject POSTs whose `Origin` isn't the site's own. Cheap; layers with the
+  honeypot and #26.
+- [ ] **29. Pin CI actions to commit SHAs.**
+  [`ci.yml`](../.github/workflows/ci.yml) uses `actions/checkout@v4` /
+  `setup-node@v4` (mutable major tags). Pin to full SHAs to remove the "tag
+  repointed to malicious code" supply-chain risk. Low priority — no secrets are
+  exposed to the workflow and it only runs on `pull_request`.
+- [ ] **30. Constrain URL fields in the content schemas.**
+  [`content.config.ts`](../src/content.config.ts): `photo`, `links.linkedin`,
+  `links.github`, `devpostUrl`, `event`/`link`, `image` are `z.string()`. A
+  maintainer-authored `javascript:` URI would render straight into an `href`.
+  Use `z.string().url()` and, for the link fields, reject non-`http(s)` schemes.
+  Low risk (maintainers author content under review) but a one-line hardening.
+- [ ] **31. Ensure `rel="noopener"` on external `target="_blank"` links.** Astro
+  adds it automatically in `.astro` files; Vue `.vue` templates do not. No
+  offending links today ([`Footer.astro`](../src/components/ui/Footer.astro)
+  opens in the same tab) — a preventative note for whenever a `_blank` link gets
+  added in a component.
+- [ ] **32. Store the Google service-account key as a sensitive env var.** When
+  the Sheets write lands, set `GOOGLE_SERVICE_ACCOUNT_KEY` as a Vercel
+  "Sensitive" env var, never echo it into logs, and remove the current
+  `console.log` of the submission body (also #13).
 
 ## What's already fine
 
@@ -165,6 +230,13 @@ Not action items — recorded so they don't get re-flagged:
 - `accent-green` on `near-black` body text ≈ 6.4:1 — passes AA.
 - Static-first Astro with Vue islands; `HeroGraph` pauses its rAF loop via
   `IntersectionObserver` + `visibilitychange`.
+- **Security:** no `set:html` / `v-html` / `innerHTML` on dynamic data (`cli-motif.ts`
+  uses `textContent` throughout; `TerminalPanel` renders lines as `{{ }}` text);
+  no secrets in the client bundle; no `.env` files tracked; content is
+  build-time Markdown authored by maintainers and Zod-validated; `/api/signup`
+  has a honeypot and rate limiting; CI runs `npm ci` (lockfile-pinned) and only
+  on `pull_request` (no `pull_request_target`, no secrets to fork PRs);
+  `package.json` gates install lifecycle scripts via `allowScripts`.
 
 ## Contributing to this file
 

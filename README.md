@@ -23,7 +23,7 @@ Other scripts: `npm run test`, `npm run lint`, `npm run build`, `npm run format`
 - **Working on the code — architecture, stack, conventions?** →
   [`documentation/ARCHITECTURE.md`](documentation/ARCHITECTURE.md)
 - **What's built, what's next?** → [`documentation/ROADMAP.md`](documentation/ROADMAP.md)
-- **Accessibility / SEO / performance / privacy action items** →
+- **Accessibility / SEO / performance / privacy / security action items** →
   [`documentation/COMPLIANCE.md`](documentation/COMPLIANCE.md)
 - **Why the site is designed the way it is** (full rationale, content model, tone) →
   [`docs/superpowers/specs/2026-08-22-montycsc-website-design.md`](docs/superpowers/specs/2026-08-22-montycsc-website-design.md)
