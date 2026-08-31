@@ -32,12 +32,12 @@ const links = [
 </nav>
 
 <style>
-  /* CLI prompt that slides in from the left and blinks on hover/focus, echoing
-     the primary CTA's gesture. The slot is permanently reserved (padding-left)
-     so the label and sibling links never shift. */
+  /* CLI prompt: no reserved space at rest — links sit at their natural spacing.
+     On hover/focus the link grows a left pad to fit the `>`, which slides in and
+     blinks; that widening shifts this link's label and every link after it.
+     Echoes the primary CTA's gesture. */
   .nav-link {
     position: relative;
-    padding-left: 0.9rem;
   }
 
   .nav-link::before {
@@ -45,9 +45,14 @@ const links = [
     position: absolute;
     left: 0;
     font-family: var(--font-mono);
-    color: var(--color-accent-green);
+    color: var(--color-gold);
     opacity: 0;
     transform: translateX(-0.3rem);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    padding-left: 0.9rem;
   }
 
   .nav-link:hover::before,
@@ -58,6 +63,10 @@ const links = [
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .nav-link {
+      transition: padding-left 0.14s ease;
+    }
+
     .nav-link::before {
       transition:
         opacity 0.14s ease,
