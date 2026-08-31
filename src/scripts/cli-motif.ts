@@ -3,7 +3,8 @@
 // on every astro:page-load. Does nothing meaningful under prefers-reduced-motion
 // (the server already rendered the full, correct text).
 
-const TYPE_MS_PER_CHAR = 14; // headings
+const TYPE_MS_PER_CHAR = 21; // headings (load-triggered, i.e. h1)
+const TYPE_MS_PER_CHAR_SCROLL = 26; // scroll-triggered headings (h2 and below)
 const RETYPE_MS_PER_CHAR = 12; // buttons
 
 function prefersReducedMotion(): boolean {
@@ -60,7 +61,7 @@ function enhanceHeadings() {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             io.disconnect();
-            typeInto(span, full, TYPE_MS_PER_CHAR);
+            typeInto(span, full, TYPE_MS_PER_CHAR_SCROLL);
           }
         }
       },
