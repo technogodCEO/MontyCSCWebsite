@@ -20,8 +20,8 @@ const preview = workshops.slice(0, 3);
     <div class="flex flex-col gap-2">
       <CliHeading as="h2" text="What We Do" class="font-heading text-3xl font-bold" />
       <p class="font-body text-warm-white/80 max-w-2xl">
-        From beginner-friendly Python sessions to advanced competitive programming, our weekly
-        workshops meet you where you are.
+        Our weekly workshops range from beginner Python to competitive programming, so there's
+        something at your level.
       </p>
     </div>
 
@@ -32,7 +32,12 @@ const preview = workshops.slice(0, 3);
             <span class="text-gold font-mono text-xs uppercase tracking-wide">
               {workshop.data.level}
             </span>
-            <CliHeading as="h3" text={workshop.data.title} animate={false} class="font-heading text-xl font-bold" />
+            <CliHeading
+              as="h3"
+              text={workshop.data.title}
+              animate={false}
+              class="font-heading text-xl font-semibold"
+            />
             <p class="font-body text-warm-white/70 text-sm">
               {workshop.data.day} &middot; {workshop.data.time}
             </p>
