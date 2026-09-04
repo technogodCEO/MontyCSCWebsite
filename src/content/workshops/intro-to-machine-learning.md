@@ -8,4 +8,4 @@ description: "An approachable tour of core machine learning concepts, from linea
 
 <!-- PLACEHOLDER: verify/replace before launch -->
 
-Basic Python familiarity is helpful but not required — we'll recap the essentials before diving into datasets, model training, and evaluation using beginner-friendly tools.
+Basic Python familiarity helps but isn't required. We'll recap what you need before working through datasets, model training, and evaluation with beginner-friendly tools.
