@@ -16,7 +16,7 @@
 - Modify: `src/styles/global.css:1` (Google Fonts `@import`)
 - Modify: `src/styles/global.css:11` (`--font-heading` token)
 
-- [ ] **Step 1: Update the Google Fonts import**
+- [x] **Step 1: Update the Google Fonts import**
 
 Current line ([global.css:1](src/styles/global.css#L1)):
 ```css
@@ -28,7 +28,7 @@ Replace with (drops the Space Grotesk family entirely; adds Space Mono at weight
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 ```
 
-- [ ] **Step 2: Update the `--font-heading` token**
+- [x] **Step 2: Update the `--font-heading` token**
 
 Current ([global.css:11](src/styles/global.css#L11)):
 ```css
@@ -40,7 +40,7 @@ Replace with:
   --font-heading: "Space Mono", monospace;
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/styles/global.css
@@ -60,90 +60,90 @@ grep -rln "font-heading" src/components src/pages src/layouts | xargs grep -l "f
 
 **Files (exact line, exact string to change — `font-semibold` → `font-bold`, nothing else on the line changes):**
 
-- [ ] **Step 1:** `src/components/sections/WhyJoin.astro:30`
+- [x] **Step 1:** `src/components/sections/WhyJoin.astro:30`
   ```
   class="font-heading text-gold text-xl font-semibold"
   ```
   → `class="font-heading text-gold text-xl font-bold"`
 
-- [ ] **Step 2:** `src/components/ui/OfficerCard.astro:41`
+- [x] **Step 2:** `src/components/ui/OfficerCard.astro:41`
   ```
   class="font-heading text-lg font-semibold"
   ```
   → `class="font-heading text-lg font-bold"`
 
-- [ ] **Step 3:** `src/components/sections/WorkshopList.astro:18`
+- [x] **Step 3:** `src/components/sections/WorkshopList.astro:18`
   ```
   class="font-heading text-xl font-semibold"
   ```
   → `class="font-heading text-xl font-bold"`
 
-- [ ] **Step 4:** `src/components/sections/ShowcaseHighlights.astro:39`
+- [x] **Step 4:** `src/components/sections/ShowcaseHighlights.astro:39`
   ```
   class="font-heading text-lg font-semibold"
   ```
   → `class="font-heading text-lg font-bold"`
 
-- [ ] **Step 5:** `src/components/ui/CtaButton.astro:19`
+- [x] **Step 5:** `src/components/ui/CtaButton.astro:19`
   ```
   'font-heading text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-near-black',
   ```
   → `'font-heading text-sm font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-near-black',`
 
-- [ ] **Step 6:** `src/components/sections/ShowcaseProjectGrid.astro:16`
+- [x] **Step 6:** `src/components/sections/ShowcaseProjectGrid.astro:16`
   ```
   class="font-heading text-2xl font-semibold"
   ```
   → `class="font-heading text-2xl font-bold"`
 
-- [ ] **Step 7:** `src/components/sections/ShowcaseProjectGrid.astro:33`
+- [x] **Step 7:** `src/components/sections/ShowcaseProjectGrid.astro:33`
   ```
   class="font-heading text-lg font-semibold"
   ```
   → `class="font-heading text-lg font-bold"`
 
-- [ ] **Step 8:** `src/components/sections/FaqList.astro:47`
+- [x] **Step 8:** `src/components/sections/FaqList.astro:47`
   ```
   class="font-heading text-warm-white text-lg font-semibold"
   ```
   → `class="font-heading text-warm-white text-lg font-bold"`
 
-- [ ] **Step 9:** `src/components/sections/ShowcaseGallery.astro:16`
+- [x] **Step 9:** `src/components/sections/ShowcaseGallery.astro:16`
   ```
   class="font-heading text-2xl font-semibold"
   ```
   → `class="font-heading text-2xl font-bold"`
 
-- [ ] **Step 10:** `src/components/sections/EventList.astro:19`
+- [x] **Step 10:** `src/components/sections/EventList.astro:19`
   ```
   class="font-heading text-xl font-semibold"
   ```
   → `class="font-heading text-xl font-bold"`
 
-- [ ] **Step 11:** `src/components/sections/SignUpForm.vue:159`
+- [x] **Step 11:** `src/components/sections/SignUpForm.vue:159`
   ```
   class="mt-2 rounded-md bg-deep-green px-4 py-2 font-heading font-semibold text-warm-white transition hover:bg-accent-green disabled:cursor-not-allowed disabled:opacity-60"
   ```
   → `class="mt-2 rounded-md bg-deep-green px-4 py-2 font-heading font-bold text-warm-white transition hover:bg-accent-green disabled:cursor-not-allowed disabled:opacity-60"`
 
-- [ ] **Step 12:** `src/components/sections/WhatWeDo.astro:35`
+- [x] **Step 12:** `src/components/sections/WhatWeDo.astro:35`
   ```
   class="font-heading text-xl font-semibold"
   ```
   → `class="font-heading text-xl font-bold"`
 
-- [ ] **Step 13:** `src/components/sections/ShowcaseTrailer.astro:15`
+- [x] **Step 13:** `src/components/sections/ShowcaseTrailer.astro:15`
   ```
   class="font-heading text-2xl font-semibold"
   ```
   → `class="font-heading text-2xl font-bold"`
 
-- [ ] **Step 14: Verify no `font-heading` + `font-semibold` pairing remains**
+- [x] **Step 14: Verify no `font-heading` + `font-semibold` pairing remains**
 
 Run: `grep -rln "font-heading" src/components src/pages src/layouts | xargs grep -l "font-semibold"`
 Expected: no output (empty).
 
-- [ ] **Step 15: Commit**
+- [x] **Step 15: Commit**
 
 ```bash
 git add -A

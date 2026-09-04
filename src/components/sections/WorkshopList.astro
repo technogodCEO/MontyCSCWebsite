@@ -15,7 +15,7 @@ const { workshops } = Astro.props;
     workshops.map((workshop) => (
       <li class="border-accent-green/40 flex flex-col gap-2 rounded-lg border p-5">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <CliHeading as="h2" text={workshop.data.title} animate={false} class="font-heading text-xl font-semibold" />
+          <CliHeading as="h2" text={workshop.data.title} animate={false} class="font-heading text-xl font-bold" />
           <span class="text-gold font-mono text-xs uppercase tracking-wide">
             {workshop.data.level}
           </span>

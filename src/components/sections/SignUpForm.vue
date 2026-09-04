@@ -156,7 +156,7 @@ async function handleSubmit() {
       <button
         type="submit"
         :disabled="state === 'submitting'"
-        class="mt-2 rounded-md bg-deep-green px-4 py-2 font-heading font-semibold text-warm-white transition hover:bg-accent-green disabled:cursor-not-allowed disabled:opacity-60"
+        class="mt-2 rounded-md bg-deep-green px-4 py-2 font-heading font-bold text-warm-white transition hover:bg-accent-green disabled:cursor-not-allowed disabled:opacity-60"
       >
         {{ state === 'submitting' ? 'Signing up…' : 'Sign Up' }}
       </button>
