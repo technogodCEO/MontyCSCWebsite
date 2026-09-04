@@ -8,4 +8,4 @@ link: "https://devpost.com/"
 
 <!-- PLACEHOLDER: verify/replace before launch -->
 
-MontyHacks is Montgomery CSC's flagship hackathon. Teams of up to four build a project overnight, with workshops, mentors, and free food throughout. Beginners are welcome — no prior hackathon experience needed.
+MontyHacks is Montgomery CSC's annual hackathon. Teams of up to four build a project overnight, with workshops, mentors, and free food throughout. Beginners are welcome — no prior hackathon experience needed.

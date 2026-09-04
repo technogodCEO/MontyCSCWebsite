@@ -10,4 +10,4 @@ description: "A mobile-friendly dashboard that helps students track and reduce t
 
 <!-- PLACEHOLDER: verify/replace before launch -->
 
-EcoTrack was built with a focus on accessibility and quick daily check-ins, encouraging small sustainable habits over time.
+EcoTrack focuses on accessibility and quick daily check-ins, so tracking small sustainable habits doesn't feel like a chore.

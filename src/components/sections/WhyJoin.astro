@@ -6,15 +6,15 @@ import CliHeading from '../ui/CliHeading.astro';
 const reasons = [
   {
     title: 'No experience required',
-    body: 'Every workshop starts from the basics and builds up — whether it is your first line of code or your fifth language.',
+    body: "Every workshop starts from the basics and builds up, so it doesn't matter if you've never coded or you already know five languages.",
   },
   {
     title: 'Trained instructors',
-    body: 'Sessions are led by peers and mentors who know how to teach, not just how to code.',
+    body: "Sessions are led by peers and mentors who can actually teach. Coding well and teaching well aren't the same thing.",
   },
   {
     title: 'A real community',
-    body: 'Hackathons, guest talks, and competitions give you people to build with, not just a syllabus.',
+    body: "Hackathons, guest talks, and competitions mean you're building with people, not just working through a syllabus alone.",
   },
 ];
 ---
@@ -27,7 +27,12 @@ const reasons = [
       {
         reasons.map((reason) => (
           <li class="flex flex-col gap-2">
-            <CliHeading as="h3" text={reason.title} animate={false} class="font-heading text-gold text-xl font-semibold" />
+            <CliHeading
+              as="h3"
+              text={reason.title}
+              animate={false}
+              class="font-heading text-gold text-xl font-semibold"
+            />
             <p class="font-body text-warm-white/80 text-sm">{reason.body}</p>
           </li>
         ))
