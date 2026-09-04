@@ -161,12 +161,13 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Build to catch syntax errors**
+- [x] **Step 1: Build to catch syntax errors**
 
 Run: `npm run build`
 Expected: build completes with no errors (this also runs `astro check`, which would flag broken CSS or malformed class strings).
+Confirmed clean.
 
-- [ ] **Step 2: Visual check in dev**
+- [ ] **Step 2: Visual check in dev** — NOT COMPLETED. The executing agent stalled on a screenshot tool mid-check; the coordinator finished Task 1/2's push+PR without a browser available to redo this cleanly. No `clamp()`/font-size values were touched, so layout risk is low, but this needs a manual glance in `npm run dev` before merge (see PR #8 body).
 
 Run: `npm run dev`, open `http://localhost:4321/`.
 Check:
