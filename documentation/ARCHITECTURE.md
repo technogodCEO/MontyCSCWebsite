@@ -64,9 +64,10 @@ manage their own `<head>`.
 ## The hero graph (`src/components/graph/`)
 
 This is the one non-trivial interactive piece and the one Vue component tree in the
-codebase. It's a fixed-position "node graph" (v1 — no physics/dragging, see
-"Not in scope" below) representing site sections (Workshops, Hackathons, Guest Talks,
-Showcase) as clickable nodes that open a terminal-styled info panel.
+codebase. It's a draggable force-directed "node graph" (v2) representing site
+sections (Workshops, Hackathons, Guest Talks, Showcase) as clickable nodes that open
+a terminal-styled info panel. Design record:
+[v2 spec](../docs/superpowers/specs/2026-10-16-hero-graph-v2-force-graph-design.md).
 
 - **`graphNodes.ts`** — the single source of truth for node data (`id`, `label`,
   `href`, `terminalLines`). Add a new node here; both presentations pick it up
@@ -79,6 +80,19 @@ Showcase) as clickable nodes that open a terminal-styled info panel.
 
   Both share the same click handling, active-node state, and `TerminalPanel`; only
   position/sizing classes differ (`fullPositions` vs. `ambientPositions`).
+- **`forceGraph.ts`** — the physics, with no Vue or DOM code (unit-tested in
+  `forceGraph.test.ts`). Wraps `d3-force`, but never starts d3's own timer:
+  `HeroGraph`'s single rAF loop calls `tick(dt)` at a fixed 60 Hz step. Works in
+  pixels; `HeroGraph` converts to percentages. Forces: a spring toward each node's
+  drifting home (the v1 sine drift now moves the *anchor*), edge springs, label
+  collision, and a soft box boundary. All tunables live in `FORCE_PARAMS`.
+- **Drag** (in `HeroGraph.vue`) — pointer events with capture; a press becomes a
+  drag after 6 px, and the click that follows a drag is swallowed so it never opens
+  the panel. On only for the full hero, with motion allowed, at ≥ 640 px wide, with
+  no panel open. `DRAG_ENABLED` switches it off globally while keeping the drift.
+- **`GraphTunePanel.vue`** — dev-only slider overlay for `FORCE_PARAMS`, shown
+  with `?graph-tune` on the dev server. Imported behind `import.meta.env.DEV`, so it
+  never reaches production.
 - **`TerminalPanel.vue`** — dumb display component (`lines`, `open` props; emits
   `close`). Renders full-screen on mobile, an inset panel on `md:` and up (CSS-only
   breakpoint, no JS viewport detection).
@@ -154,7 +168,6 @@ On every PR: checkout → Node 20 setup (npm cache) → `npm ci` → `npm run li
 ## Deliberately out of scope (for now)
 
 See the plan's ["What's Deliberately Not in This Plan"](../docs/superpowers/plans/2026-08-22-site-foundation-plan.md#whats-deliberately-not-in-this-plan)
-section for the authoritative list. In short: no physics/draggable graph (v1 uses
-fixed positions), no real Google Sheets write for sign-ups (stubbed, logs instead),
+section for the authoritative list. In short: no real Google Sheets write for sign-ups (stubbed, logs instead),
 no real content/photos/social links (placeholders throughout, marked accordingly),
 and no Vercel project setup (one-time dashboard action, not a code change).

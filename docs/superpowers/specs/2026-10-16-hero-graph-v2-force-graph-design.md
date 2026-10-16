@@ -1,7 +1,7 @@
 # Hero Graph v2: Draggable Force Graph (Design)
 
 **Date:** 2026-10-16
-**Status:** Draft. Open questions at the end need an answer before planning.
+**Status:** Approved 2026-10-16 (all four open questions resolved with the recommended defaults). Implemented; feel tuning on real devices pending.
 **Branch:** `claude/happy-hopper-mkbbui`
 
 Turns the hero graph's authored drift into a real physics simulation that visitors
@@ -119,8 +119,8 @@ axes, so v2 simulates in **pixels**:
 
 | Force | d3 API | Purpose |
 |---|---|---|
-| **Home anchor** | `forceX` / `forceY` with per-node targets | Pulls each node toward its home. The target is `home + drift(t)` using v1's existing sine parameters, so ambient drift comes "for free" and v1's drift data stays useful. |
-| **Edge springs** | `forceLink(graphEdges)` | Ring edges are stiffer; diagonals are weaker and slightly longer. Each edge's rest length is its home-to-home distance, so the graph's resting shape is the authored layout. |
+| **Home anchor** | custom force (see 3.4) | Pulls each node toward its home. The target is `home + drift(t)` using v1's existing sine parameters, so ambient drift comes "for free" and v1's drift data stays useful. |
+| **Edge springs** | `forceLink(graphEdges)` | Ring edges are stiffer; diagonals are weaker. Each edge's rest length is exactly its home-to-home distance, so the graph's resting shape is the authored layout. (The draft gave diagonals a longer "slack" rest length, but d3 springs push as well as pull, so that shoved nodes about 4 px off home. Dropped.) |
 | **Collision** | `forceCollide` | Radius from each node's measured label pill (half its width, plus padding), so labels never overlap mid-throw. |
 | **Bounds** | small custom force | Pushes nodes back inside the hero box (inset by their radius) so nothing gets thrown off-screen. Clamping positions directly makes nodes stick to the edge, so this is a soft force. |
 
@@ -130,9 +130,17 @@ collision already do its job, and charge is the usual source of jitter.
 ### 3.4 Keeping it alive without burning CPU
 
 d3 simulations "cool" (alpha decays) and stop when settled. v2 wants ambient
-drift forever, so while the hero is visible and motion is allowed it holds a small
-`alphaTarget` (starting value 0.02). During a drag the target rises (0.3) so the
-whole graph reacts, and it drops back on release.
+drift forever, so alpha is **held at 1** (`alphaDecay(0)`) and stability comes
+from damping (`velocityDecay`) instead. (Revised during implementation: the
+original draft varied `alphaTarget` between idle and drag, but since every force
+scales with alpha, that made the idle drift sluggish and the tuning harder to
+reason about. A constant alpha makes it a plain damped spring system.)
+
+The anchor can't use d3's `forceX`/`forceY`, because those cache their targets and
+the target drifts every frame; it's a small custom force instead.
+
+Physics steps at a fixed 60 Hz (up to 4 catch-up steps per frame), so it feels
+the same on 60, 120 and 144 Hz screens.
 
 Cost: 4 nodes, 6 links, one collision quadtree, one tick per frame, which is
 negligible. Pausing (tab hidden, hero off-screen) stops the rAF loop and so stops
@@ -152,11 +160,10 @@ Starting values, not final ones. Tuning is a planned step (section 7).
 
 | Parameter | Start |
 |---|---|
-| Anchor strength (`forceX/Y.strength`) | 0.06 |
+| Anchor strength | 0.06 |
 | Ring link strength / diagonal link strength | 0.5 / 0.15 |
-| Diagonal rest-length multiplier | 1.05 |
 | `velocityDecay` | 0.35 |
-| Idle `alphaTarget` / drag `alphaTarget` | 0.02 / 0.3 |
+| Bounds strength | 0.3 |
 | Drag threshold | 6 px |
 | Throw speed cap | 1.5 px per ms |
 | Collision padding | 8 px |
@@ -209,7 +216,7 @@ unchanged, so `Hero.astro` and `Layout.astro` don't change).
 
 | File | Change |
 |---|---|
-| `src/components/graph/forceGraph.ts` (new) | Pure TS: builds the d3 simulation from `graphNodes` / `graphEdges` and a box size; exposes `tick(dtMs)`, `resize(w, h)`, `dragStart(id, x, y)`, `dragMove(x, y)`, `dragEnd(vx, vy)`, `positions()`, and `FORCE_PARAMS`. No Vue, no DOM. |
+| `src/components/graph/forceGraph.ts` (new) | Pure TS: builds the d3 simulation from `graphNodes` / `graphEdges` and a box size; exposes `tick(dtMs)`, `resize(w, h)`, `dragStart(id, x, y)`, `dragMove(x, y)`, `dragEnd(vx, vy)`, `setNodeSizes(sizes)`, `applyParams()`, `positions()`, and `FORCE_PARAMS`. No Vue, no DOM. |
 | `src/components/graph/forceGraph.test.ts` (new) | Settles to home within N ticks; dragged node follows the pointer; neighbours move when one is dragged; nodes return home after release; nodes stay inside bounds after a hard throw; throw speed is capped; resize moves the homes. |
 | `src/components/graph/HeroGraph.vue` | Replace the sine loop with `forceGraph.tick()`. Add `ResizeObserver`, pointer handlers (down/move/up/cancel with pointer capture), drag threshold, click suppression, `dragEnabled` computed, `touch-action` and cursor classes. Packet logic unchanged. |
 | `src/components/graph/HeroGraph.test.ts` | Existing tests stay green. Add: drag past the threshold doesn't open the panel; sub-threshold press does; no drag listeners under reduced motion, in the ambient cluster, or below 640 px. |
@@ -270,14 +277,11 @@ in small reviewable steps and drag is switched on only when it feels right.
 - Physics in the ambient NavBar cluster.
 - Any `@theme` token changes.
 
-## Open questions
+## Resolved questions
 
-Each has a recommended default (in bold) that the plan will use unless told otherwise.
+All four were resolved on 2026-10-16 with the recommended default.
 
-1. **After a drag, do nodes spring home or stay where dropped?** **Spring home.**
-2. **Phones: drag or no drag?** **No drag below 640 px** (v1 behaviour).
-3. **Dependency: `d3-force` or a hand-rolled simulation?** **`d3-force`**, ticked
-   manually from our own loop.
-4. **Should dragging a node briefly highlight its edges (e.g. edges brighten
-   while held)?** **Yes, subtle**: connected edges go from 50% to 80% opacity
-   during a drag. Small cost, makes the "springs" visible.
+1. After a drag, nodes **spring home**.
+2. **No drag below 640 px** on phones (v1 behaviour).
+3. **`d3-force`**, ticked manually from our own loop.
+4. Dragging a node **brightens its edges** subtly (50% → 80% opacity) while held.

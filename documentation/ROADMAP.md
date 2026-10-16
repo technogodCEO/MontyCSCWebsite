@@ -51,11 +51,13 @@ public launch:
 Not scoped into the current build — captured here so they aren't lost, not because
 work has started on any of them:
 
-- **v2 draggable force-graph hero** — the current hero graph (Chunk 4) uses fixed
-  node positions with no physics simulation. A v2 with a real force-directed,
-  draggable graph is an explicit roadmap item per the design spec, deferred to keep
-  v1 shippable. Now specced (draft, open questions pending):
-  [v2 force-graph design](../docs/superpowers/specs/2026-10-16-hero-graph-v2-force-graph-design.md).
+- **v2 draggable force-graph hero** — ✅ built on `claude/happy-hopper-mkbbui`, see
+  [v2 force-graph design](../docs/superpowers/specs/2026-10-16-hero-graph-v2-force-graph-design.md)
+  and [plan](../docs/superpowers/plans/2026-10-16-hero-graph-v2-force-graph.md).
+  Remaining before merge: the hands-on feel checklist (spec §7) on real devices.
+- **Character ripple background** — follow-up to v2, not specced yet. Ripples
+  through a faint hex/binary field behind the hero, triggered by graph events
+  (node drop, node click). See the v2 spec's "Out of scope".
 - **Lightweight page-view analytics** — the spec suggests Vercel Analytics as an
   optional later add if the club wants traffic-level insight beyond sign-up-count
   (the simplest v1 success metric: rows in the sign-up sheet).
