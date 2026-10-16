@@ -54,7 +54,8 @@ work has started on any of them:
 - **v2 draggable force-graph hero** — the current hero graph (Chunk 4) uses fixed
   node positions with no physics simulation. A v2 with a real force-directed,
   draggable graph is an explicit roadmap item per the design spec, deferred to keep
-  v1 shippable.
+  v1 shippable. Now specced (draft, open questions pending):
+  [v2 force-graph design](../docs/superpowers/specs/2026-10-16-hero-graph-v2-force-graph-design.md).
 - **Lightweight page-view analytics** — the spec suggests Vercel Analytics as an
   optional later add if the club wants traffic-level insight beyond sign-up-count
   (the simplest v1 success metric: rows in the sign-up sheet).
