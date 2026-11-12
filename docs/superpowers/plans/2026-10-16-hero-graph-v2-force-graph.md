@@ -113,7 +113,8 @@ Verification after each task: `npm run test && npm run lint`. Full gate at the e
       pointer, release returns it home, no panel opens after the drag, a plain
       click opens it. At 390 × 844 (touch): no drag classes. The only hydration
       warning is the pre-existing `slot="ambient-graph"` one, also present on `main`.
-- [ ] **Feel checklist on real hardware** (spec §7): laptop trackpad, mouse,
+- [x] **Feel checklist on real hardware** (signed off by the project owner
+      2026-11-12; starting `FORCE_PARAMS` kept as-is) (spec §7): laptop trackpad, mouse,
       iPad/Android tablet, school Chromebook. Tune with `?graph-tune`, then paste
       the copied values into `FORCE_PARAMS`. If tuning runs long, set
       `DRAG_ENABLED = false` and merge with drift only.
