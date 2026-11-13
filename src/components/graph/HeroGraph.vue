@@ -2,6 +2,7 @@
 import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { graphNodes, graphEdges } from './graphNodes';
 import { createForceGraph, FORCE_PARAMS, type ForceGraph } from './forceGraph';
+import { RIPPLE_ENABLED, RIPPLE_EVENT, type RippleEventDetail } from './rippleField';
 import TerminalPanel from './TerminalPanel.vue';
 
 /**
@@ -16,6 +17,11 @@ const DRAG_THRESHOLD_PX = 6;
 const DRAG_MIN_WIDTH_QUERY = '(min-width: 640px)';
 /** How far back (ms) to look at pointer movement when computing a throw's velocity. */
 const THROW_SAMPLE_MS = 50;
+/** Ripple strength when a node's panel opens (click, tap or keyboard Enter). */
+const OPEN_RIPPLE_STRENGTH = 0.3;
+/** Ripple strength range for a dropped node: a gentle set-down → a hard flick. */
+const DROP_RIPPLE_MIN = 0.4;
+const DROP_RIPPLE_MAX = 1;
 
 // Dev-only physics tuning overlay (?graph-tune). `import.meta.env.DEV` is
 // statically false in production builds, so the panel's chunk is never emitted.
@@ -62,6 +68,7 @@ function selectNode(event: MouseEvent, id: string) {
     return;
   }
   activeNodeId.value = id;
+  sendRipple(id, OPEN_RIPPLE_STRENGTH);
 }
 
 function closePanel() {
@@ -187,6 +194,9 @@ function endPress(event: PointerEvent, withThrow: boolean) {
   if (draggingId.value) {
     const { vx, vy } = withThrow ? releaseVelocity() : { vx: 0, vy: 0 };
     graph?.dragEnd(vx, vy);
+    // Bigger throw, bigger ripple: scale by release speed relative to the throw cap.
+    const speed = Math.min(1, Math.hypot(vx, vy) / tuneParams.throwSpeedCap);
+    sendRipple(draggingId.value, DROP_RIPPLE_MIN + (DROP_RIPPLE_MAX - DROP_RIPPLE_MIN) * speed);
     draggingId.value = null;
   }
   press = null;
@@ -200,6 +210,23 @@ function onPointerUp(event: PointerEvent) {
 /** Interrupted (e.g. the browser took over for a gesture): release in place, no throw. */
 function onPointerCancel(event: PointerEvent) {
   endPress(event, false);
+}
+
+/**
+ * Tell the background RippleField (a separate island in Hero.astro) to ripple
+ * from this node's centre. Only the full hero, only with motion allowed.
+ */
+function sendRipple(id: string, strength: number) {
+  if (!RIPPLE_ENABLED || !animated) return;
+  const el = rootRef.value?.querySelector(`[data-node-id="${id}"]`);
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  const detail: RippleEventDetail = {
+    clientX: r.left + r.width / 2,
+    clientY: r.top + r.height / 2,
+    strength,
+  };
+  window.dispatchEvent(new CustomEvent(RIPPLE_EVENT, { detail }));
 }
 
 /** The tuning panel changed a value that needs re-applying (link/collision settings). */

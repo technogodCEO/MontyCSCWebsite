@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
-import { beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import HeroGraph from './HeroGraph.vue';
+import { RIPPLE_EVENT, type RippleEventDetail } from './rippleField';
 
 function mockReducedMotion(reduce: boolean, wide = true) {
   window.matchMedia = ((query: string) => ({
@@ -146,6 +147,52 @@ describe('HeroGraph', () => {
       const wrapper = mount(HeroGraph, { props: { ambient: true } });
       await wrapper.vm.$nextTick();
       expect(wrapper.get('[data-node-id="workshops"]').classes()).not.toContain('touch-none');
+    });
+  });
+
+  describe('ripple events', () => {
+    /** Collect every ripple HeroGraph dispatches during a test. */
+    let ripples: RippleEventDetail[] = [];
+    const listener = (e: Event) => ripples.push((e as CustomEvent<RippleEventDetail>).detail);
+    beforeEach(() => {
+      ripples = [];
+      window.addEventListener(RIPPLE_EVENT, listener);
+    });
+    afterEach(() => window.removeEventListener(RIPPLE_EVENT, listener));
+
+    const base = { pointerId: 1, isPrimary: true, button: 0, clientY: 100 };
+
+    test('opening a node panel sends one small ripple', async () => {
+      const wrapper = mount(HeroGraph);
+      await wrapper.get('[data-node-id="workshops"]').trigger('click');
+      expect(ripples).toHaveLength(1);
+      expect(ripples[0].strength).toBeCloseTo(0.3);
+    });
+
+    test('dropping a dragged node sends one ripple, and the swallowed click adds none', async () => {
+      const wrapper = mount(HeroGraph);
+      await wrapper.vm.$nextTick();
+      const node = wrapper.get('[data-node-id="showcase"]');
+      await node.trigger('pointerdown', { ...base, clientX: 100 });
+      await node.trigger('pointermove', { ...base, clientX: 140 });
+      await node.trigger('pointerup', { ...base, clientX: 140 });
+      await node.trigger('click');
+      expect(ripples).toHaveLength(1);
+      expect(ripples[0].strength).toBeGreaterThanOrEqual(0.4);
+      expect(ripples[0].strength).toBeLessThanOrEqual(1);
+    });
+
+    test('reduced motion: no ripples', async () => {
+      mockReducedMotion(true);
+      const wrapper = mount(HeroGraph);
+      await wrapper.get('[data-node-id="workshops"]').trigger('click');
+      expect(ripples).toHaveLength(0);
+    });
+
+    test('ambient cluster: no ripples', async () => {
+      const wrapper = mount(HeroGraph, { props: { ambient: true } });
+      await wrapper.get('[data-node-id="workshops"]').trigger('click');
+      expect(ripples).toHaveLength(0);
     });
   });
 });

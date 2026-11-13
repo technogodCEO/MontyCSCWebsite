@@ -1,7 +1,7 @@
 # Hero Graph v2: Draggable Force Graph (Design)
 
 **Date:** 2026-10-16
-**Status:** Approved 2026-10-16 (all four open questions resolved with the recommended defaults). Implemented; feel tuning on real devices pending.
+**Status:** Approved 2026-10-16 (all four open questions resolved with the recommended defaults). Implemented and merged; feel checklist signed off on real devices 2026-11-12 with the starting parameters.
 **Branch:** `claude/happy-hopper-mkbbui`
 
 Turns the hero graph's authored drift into a real physics simulation that visitors

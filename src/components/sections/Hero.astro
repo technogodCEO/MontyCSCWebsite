@@ -4,13 +4,22 @@
 // headline/subhead copy. The ambient version is already mounted persistently
 // in Layout.astro's NavBar slot — this renders the full spread-out version
 // inline in the page flow.
+//
+// RippleField is the faint hex character field behind the graph. It spans the
+// whole section width but starts just below the subhead (it finds the
+// `data-hero-subhead` element), so the headline stays on a clean background.
+// `relative isolate` lets its -z-10 canvas sit above the section background but
+// behind the content; `overflow-hidden` keeps it from widening the page.
 import HeroGraph from '../graph/HeroGraph.vue';
+import RippleField from '../graph/RippleField.vue';
+import { RIPPLE_ENABLED } from '../graph/rippleField';
 import CliHeading from '../ui/CliHeading.astro';
 ---
 
 <section
-  class="bg-near-black text-warm-white flex min-h-dvh flex-col items-center justify-center px-6 py-16"
+  class="bg-near-black text-warm-white relative isolate flex min-h-dvh overflow-hidden flex-col items-center justify-center px-6 py-16"
 >
+  {RIPPLE_ENABLED && <RippleField client:load />}
   <div class="mx-auto flex max-w-5xl flex-col items-center gap-10 text-center">
     <div class="flex flex-col gap-4">
       <CliHeading
@@ -19,6 +28,7 @@ import CliHeading from '../ui/CliHeading.astro';
         class="font-heading text-[clamp(2.25rem,1.5rem_+_2.7vw,3.75rem)] font-bold"
       />
       <p
+        data-hero-subhead
         class="font-body text-accent-green mx-auto max-w-2xl text-[clamp(1.125rem,1.05rem_+_0.25vw,1.25rem)]"
       >
         We run weekly coding workshops, host hackathons, and hang out with people into the same
