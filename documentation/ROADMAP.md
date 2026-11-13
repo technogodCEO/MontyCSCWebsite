@@ -55,9 +55,10 @@ work has started on any of them:
   [v2 force-graph design](../docs/superpowers/specs/2026-10-16-hero-graph-v2-force-graph-design.md)
   and [plan](../docs/superpowers/plans/2026-10-16-hero-graph-v2-force-graph.md).
   Feel checklist (spec §7) signed off on real devices 2026-11-12.
-- **Character ripple background** — follow-up to v2, not specced yet. Ripples
-  through a faint hex/binary field behind the hero, triggered by graph events
-  (node drop, node click). See the v2 spec's "Out of scope".
+- **Character ripple background** — follow-up to v2. Specced (draft, open questions
+  pending): [ripple field design](../docs/superpowers/specs/2026-11-13-hero-ripple-field-design.md).
+  Ripples through a faint character field behind the hero graph, triggered by graph
+  events (node drop, node open).
 - **Lightweight page-view analytics** — the spec suggests Vercel Analytics as an
   optional later add if the club wants traffic-level insight beyond sign-up-count
   (the simplest v1 success metric: rows in the sign-up sheet).
