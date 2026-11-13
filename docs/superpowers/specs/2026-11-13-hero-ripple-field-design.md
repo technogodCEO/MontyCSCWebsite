@@ -1,7 +1,7 @@
 # Hero Ripple Field (Design)
 
 **Date:** 2026-11-13
-**Status:** Draft. Open questions at the end need an answer before planning.
+**Status:** Approved and implemented 2026-11-13. Open questions 1–3 took the recommended default; question 4 chose the **hybrid** extent (see section 2 and "Revisions during implementation").
 **Branch:** `claude/happy-hopper-mkbbui`
 
 A faint field of monospace characters behind the hero graph. Graph events send a
@@ -66,8 +66,10 @@ something to read.
 - **The field sits behind everything.** Layer order, bottom to top: field canvas,
   edge SVG, packet, nodes, terminal panel. Node pills already have an opaque
   `bg-near-black` background, so labels stay fully legible.
-- **It never touches the headline or subhead.** The field fills only the
-  `HeroGraph` box, not the whole hero section.
+- **It never touches the headline or subhead.** Hybrid extent: the field spans
+  the whole hero section's width, but starts just below the subhead and fades in
+  over 80 px, so the text sits on a clean background. It also fades out at the
+  left/right edges and toward the bottom.
 - **The edges stay readable.** At rest the glyphs (about 6%) sit well under the
   diagonal edges (25%) and ring edges (50%); at a wavefront peak (35%) they
   briefly approach the diagonals, which is acceptable for a moment of motion.
@@ -80,7 +82,7 @@ something to read.
 |---|---|
 | Full hero, motion allowed (any width) | Static field plus ripples. Phones get ripples on tap too: tapping is how the panel opens there, and v2's phone fallback only removed drag. |
 | `prefers-reduced-motion: reduce` | Static field only, no ripples. The rest state is fully static, so it's safe to show. |
-| Ambient NavBar cluster | No field at all (the box is about 80 × 32 px). |
+| Ambient NavBar cluster | No field at all. The field only exists in the homepage hero section. |
 | Before hydration / no JS | The canvas is empty, so the hero looks exactly as it does today. |
 | Tab hidden / hero off-screen | Nothing to pause at idle. A ripple in flight stops with the graph loop, and the field is redrawn at rest when the loop resumes. |
 
@@ -90,6 +92,15 @@ field included, in one line, mirroring v2's `DRAG_ENABLED`.
 ---
 
 ## 4. Architecture
+
+> **As built.** The hybrid extent changed the architecture: the field must cover
+> the full hero section, while `HeroGraph` sits inside a narrower centred column.
+> So the field is **its own island in `Hero.astro`**, not a child of
+> `HeroGraph`. The two talk through a `window` CustomEvent (`hero-ripple`), and
+> the field runs a short rAF loop **only while a ripple is active** instead of
+> sharing the graph's loop. It also redraws dirty cells directly instead of
+> keeping a cached rest layer. Sections 4.2 and 4.3 below describe the original
+> draft; see "Revisions during implementation" for what changed.
 
 Same split as v2: a framework-free model that's unit-testable, plus a thin
 rendering component.
@@ -185,17 +196,39 @@ mid-ripple plus the device check in section 5).
 
 ---
 
+## Revisions during implementation
+
+1. **Hybrid extent** (open question 4, decided after comparing screenshots of
+   all three options on 2026-11-13). Graph-box-only read as a floating patch,
+   especially on phones; whole-section put the green subhead on a green texture.
+   The hybrid spans the full width below the subhead.
+2. **Separate island + window event**, because the canvas has to escape
+   `HeroGraph`'s centred column. `HeroGraph` dispatches `hero-ripple` with the
+   node's viewport centre and a strength; `RippleField` converts to its own
+   coordinates. The 3-ripple cap, strengths and triggers are unchanged.
+3. **The field's own rAF loop, only while active.** With the field in another
+   island, sharing the graph's loop would need cross-island plumbing. The loop
+   starts on a ripple event and stops the frame the last ripple ends, so idle
+   cost is still zero.
+4. **No cached rest layer.** The visible canvas *is* the rest state; each frame
+   clears and redraws only the dirty cells the model reports, including re-rolled
+   glyphs. This is simpler and draws less than copying a full cached layer per
+   frame.
+5. Measured in headless Chromium at 1920 × 1080 @2x with three overlapping
+   full-strength ripples: median frame gap 16.7 ms, p95 16.8 ms.
+
 ## Out of scope
 
 - Ripples from anything other than graph events (empty-space clicks, scroll,
   cursor trail).
-- The field anywhere outside the hero graph box, including other pages.
+- The field on any page other than the homepage, or behind the headline/subhead.
 - Colour other than `accent-green`.
 - WebGL; Canvas 2D is enough at this cell count.
 
-## Open questions
+## Resolved questions
 
-Each has a recommended default (in bold) that the plan will use unless told otherwise.
+Resolved 2026-11-13. Questions 1–3 took the bold default; question 4 went with the
+hybrid instead.
 
 1. **Glyph set:** hex, binary (`0`/`1`), or short code fragments? **Hex**: denser
    texture than binary, and unlike code fragments it never tempts anyone to read it.
@@ -206,4 +239,4 @@ Each has a recommended default (in bold) that the plan will use unless told othe
    would make the field animate every 3–7 s on its own, costing the zero-idle
    budget and diluting the link between ripples and what the visitor did.
 4. **Field extent:** just the graph box, or the whole hero section behind the
-   headline too? **Graph box only**: the headline stays on a clean background.
+   headline too? Decided: **hybrid**, full width but starting below the subhead.

@@ -93,6 +93,14 @@ a terminal-styled info panel. Design record:
 - **`GraphTunePanel.vue`** — dev-only slider overlay for `FORCE_PARAMS`, shown
   with `?graph-tune` on the dev server. Imported behind `import.meta.env.DEV`, so it
   never reaches production.
+- **`rippleField.ts` / `RippleField.vue`** — the faint hex character field behind
+  the hero ([spec](../docs/superpowers/specs/2026-11-13-hero-ripple-field-design.md)).
+  `RippleField` is a separate island in `Hero.astro`: full section width, starting
+  just below the subhead (`data-hero-subhead`). `HeroGraph` dispatches a
+  `hero-ripple` window event when a node is dropped or opened; the field runs a rAF
+  loop only while a ripple is active and redraws only the cells that changed.
+  `rippleField.ts` is the DOM-free model (unit-tested); `RIPPLE_ENABLED` removes the
+  whole feature, and `RIPPLE_PARAMS` holds its tunables (also on `?graph-tune`).
 - **`TerminalPanel.vue`** — dumb display component (`lines`, `open` props; emits
   `close`). Renders full-screen on mobile, an inset panel on `md:` and up (CSS-only
   breakpoint, no JS viewport detection).
